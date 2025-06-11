@@ -240,6 +240,11 @@ After mastering this setup, explore:
 - **Monitoring**: Error tracking and performance monitoring
 - **CI/CD**: Automated deployment pipelines
 
+
+<img width="1512" alt="Screenshot 2025-06-11 at 1 39 38 PM" src="https://github.com/user-attachments/assets/0ff70887-d379-4df2-8132-dbf2f3e5f751" />
+<img width="1509" alt="Screenshot 2025-06-11 at 1 39 04 PM" src="https://github.com/user-attachments/assets/177993a9-cf4c-4dd2-b2b1-d0bf1dc991a0" />
+
+
 ---
 
 **Happy Learning! 🎉**
