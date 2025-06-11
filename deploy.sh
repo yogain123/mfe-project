@@ -79,4 +79,5 @@ echo "📦 Deploying to S3..."
 npm run deploy:all:helper
 
 echo "✅ Deployment completed!"
-echo "🌐 Shell URL: https://${S3_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/shell/index.html" 
+echo "🌐 Shell URL S3: https://${S3_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/mfe/shell/index.html" 
+echo "🌐 Shell URL Cloudfront: https://d27b98gv23gwn2.cloudfront.net/mfe/shell/index.html" 
