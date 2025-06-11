@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header MFE - Standalone Mode</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .standalone-info {
+            background-color: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .standalone-info h2 {
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+        
+        .standalone-info p {
+            color: #004499;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="standalone-info">
+        <h2>📋 Header MFE - Standalone Mode</h2>
+        <p>This is the Header MFE running independently on port 3001</p>
+        <p>In the Shell app, this component is loaded remotely and embedded in the layout</p>
+        <p><strong>Module Federation Exposed:</strong> ./Header</p>
+    </div>
+    
+    <div id="root">
+        <div>Loading Header MFE...</div>
+    </div>
+</body>
+</html> 

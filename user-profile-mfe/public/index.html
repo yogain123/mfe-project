@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile MFE - Standalone Mode</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .standalone-info {
+            background-color: #f3e5f5;
+            border: 1px solid #9c27b0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .standalone-info h2 {
+            color: #6a1b9a;
+            margin-bottom: 10px;
+        }
+        
+        .standalone-info p {
+            color: #4a148c;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="standalone-info">
+        <h2>👤 User Profile MFE - Standalone Mode</h2>
+        <p>This is the User Profile MFE running independently on port 3004</p>
+        <p>This component can be embedded in other MFEs (like Products MFE)</p>
+        <p><strong>Module Federation Exposed:</strong> ./UserProfile</p>
+        <p><strong>Usage:</strong> Component MFE within other MFEs</p>
+    </div>
+    
+    <div id="root">
+        <div>Loading User Profile MFE...</div>
+    </div>
+</body>
+</html> 
