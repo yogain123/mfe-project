@@ -35,12 +35,12 @@
     "start:products": "cd products-mfe && npm start",
     "start:orders": "cd orders-mfe && npm start",
     "start:profile": "cd user-profile-mfe && npm start",
-    "deploy:all": "./quick-deploy.sh",
+    "deploy:all": "./deploy.sh",
     "deploy:all:helper": "echo 'Deploying to S3...' && npm run deploy:shell && npm run deploy:header && npm run deploy:products && npm run deploy:orders && npm run deploy:profile",
-    "deploy:shell": "./quick-deploy.sh deploy shell",
-    "deploy:header": "./quick-deploy.sh deploy header",
-    "deploy:products": "./quick-deploy.sh deploy products",
-    "deploy:orders": "./quick-deploy.sh deploy orders",
+    "deploy:shell": "./deploy.sh deploy shell",
+    "deploy:header": "./deploy.sh deploy header",
+    "deploy:products": "./deploy.sh deploy products",
+    "deploy:orders": "./deploy.sh deploy orders",
     "deploy:profile": "./quick-deploy.sh deploy profile"
   },
   "devDependencies": {
