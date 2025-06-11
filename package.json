@@ -6,28 +6,28 @@
   "workspaces": [
     "shell",
     "header-mfe",
-    "products-mfe", 
+    "products-mfe",
     "orders-mfe",
     "user-profile-mfe"
   ],
   "scripts": {
     "install:all": "npm install && npm run install:shell && npm run install:header && npm run install:products && npm run install:orders && npm run install:profile",
     "install:shell": "cd shell && npm install",
-    "install:header": "cd header-mfe && npm install", 
+    "install:header": "cd header-mfe && npm install",
     "install:products": "cd products-mfe && npm install",
     "install:orders": "cd orders-mfe && npm install",
     "install:profile": "cd user-profile-mfe && npm install",
     "dev": "concurrently \"npm run dev:header\" \"npm run dev:products\" \"npm run dev:orders\" \"npm run dev:profile\" \"npm run dev:shell\"",
     "dev:shell": "cd shell && npm run dev",
     "dev:header": "cd header-mfe && npm run dev",
-    "dev:products": "cd products-mfe && npm run dev", 
+    "dev:products": "cd products-mfe && npm run dev",
     "dev:orders": "cd orders-mfe && npm run dev",
     "dev:profile": "cd user-profile-mfe && npm run dev",
     "build": "npm run build:header && npm run build:products && npm run build:orders && npm run build:profile && npm run build:shell",
     "build:shell": "cd shell && npm run build",
     "build:header": "cd header-mfe && npm run build",
     "build:products": "cd products-mfe && npm run build",
-    "build:orders": "cd orders-mfe && npm run build", 
+    "build:orders": "cd orders-mfe && npm run build",
     "build:profile": "cd user-profile-mfe && npm run build",
     "start": "npm run start:header & npm run start:products & npm run start:orders & npm run start:profile & npm run start:shell",
     "start:shell": "cd shell && npm start",
@@ -35,18 +35,24 @@
     "start:products": "cd products-mfe && npm start",
     "start:orders": "cd orders-mfe && npm start",
     "start:profile": "cd user-profile-mfe && npm start",
-    "deploy": "npm run build && npm run deploy:s3",
-    "deploy:s3": "echo 'Deploying to S3...' && npm run deploy:shell:s3 && npm run deploy:header:s3 && npm run deploy:products:s3 && npm run deploy:orders:s3 && npm run deploy:profile:s3",
-    "deploy:shell:s3": "cd shell && npm run deploy:s3",
-    "deploy:header:s3": "cd header-mfe && npm run deploy:s3", 
-    "deploy:products:s3": "cd products-mfe && npm run deploy:s3",
-    "deploy:orders:s3": "cd orders-mfe && npm run deploy:s3",
-    "deploy:profile:s3": "cd user-profile-mfe && npm run deploy:s3"
+    "deploy:all": "./quick-deploy.sh",
+    "deploy:all:helper": "echo 'Deploying to S3...' && npm run deploy:shell && npm run deploy:header && npm run deploy:products && npm run deploy:orders && npm run deploy:profile",
+    "deploy:shell": "./quick-deploy.sh deploy shell",
+    "deploy:header": "./quick-deploy.sh deploy header",
+    "deploy:products": "./quick-deploy.sh deploy products",
+    "deploy:orders": "./quick-deploy.sh deploy orders",
+    "deploy:profile": "./quick-deploy.sh deploy profile"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0"
+    "concurrently": "^7.6.0",
+    "dotenv": "^16.5.0"
   },
-  "keywords": ["micro-frontend", "webpack", "module-federation", "react"],
+  "keywords": [
+    "micro-frontend",
+    "webpack",
+    "module-federation",
+    "react"
+  ],
   "author": "MFE Learning Project",
   "license": "MIT"
-} 
+}

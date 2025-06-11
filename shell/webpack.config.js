@@ -1,34 +1,39 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+require("dotenv").config({ path: "../.  " });
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === "production";
 
 // Environment-based URLs for MFEs
 const getRemoteUrl = (port, name) => {
   if (isProduction) {
-    // In production, these would be your S3 URLs or CDN URLs
-    return `https://your-s3-bucket.s3.amazonaws.com/${name}/remoteEntry.js`;
+    // Pull from S3 bucket for production
+    const url = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${name}/remoteEntry.js`;
+    console.log("url", url);
+    return url;
   }
+
   return `http://localhost:${port}/remoteEntry.js`;
 };
 
 module.exports = {
-  mode: isProduction ? 'production' : 'development',
-  entry: './src/index.js',
-  
+  mode: isProduction ? "production" : "development",
+  entry: "./src/index.js",
+
   devServer: {
     port: 3000,
     historyApiFallback: true,
     hot: true,
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
-    }
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "X-Requested-With, content-type, Authorization",
+    },
   },
 
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx']
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
   },
 
   module: {
@@ -37,65 +42,65 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
-          }
-        }
+            presets: ["@babel/preset-env", "@babel/preset-react"],
+          },
+        },
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      }
-    ]
+        use: ["style-loader", "css-loader"],
+      },
+    ],
   },
 
   plugins: [
     new ModuleFederationPlugin({
-      name: 'shell',
+      name: "shell",
       remotes: {
         // Component MFEs (can be embedded anywhere)
-        headerMfe: `headerMfe@${getRemoteUrl(3001, 'header-mfe')}`,
-        
+        headerMfe: `headerMfe@${getRemoteUrl(3001, "header-mfe")}`,
+
         // Page MFEs (full page applications)
-        productsMfe: `productsMfe@${getRemoteUrl(3002, 'products-mfe')}`,
-        ordersMfe: `ordersMfe@${getRemoteUrl(3003, 'orders-mfe')}`
+        productsMfe: `productsMfe@${getRemoteUrl(3002, "products-mfe")}`,
+        ordersMfe: `ordersMfe@${getRemoteUrl(3003, "orders-mfe")}`,
       },
       shared: {
         react: {
           singleton: true,
-          requiredVersion: '^17.0.2',
-          eager: true
+          requiredVersion: "^17.0.2",
+          eager: true,
         },
-        'react-dom': {
+        "react-dom": {
           singleton: true,
-          requiredVersion: '^17.0.2',
-          eager: true
+          requiredVersion: "^17.0.2",
+          eager: true,
         },
-        'react-router-dom': {
+        "react-router-dom": {
           singleton: true,
-          requiredVersion: '^6.3.0',
-          eager: false
-        }
-      }
+          requiredVersion: "^6.3.0",
+          eager: false,
+        },
+      },
     }),
-    
+
     new HtmlWebpackPlugin({
-      template: './public/index.html',
-      title: 'MFE Shell - Learning Project'
-    })
+      template: "./public/index.html",
+      title: "MFE Shell - Learning Project",
+    }),
   ],
 
   optimization: {
     splitChunks: {
-      chunks: 'all',
+      chunks: "all",
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all'
-        }
-      }
-    }
-  }
-}; 
+          name: "vendors",
+          chunks: "all",
+        },
+      },
+    },
+  },
+};
