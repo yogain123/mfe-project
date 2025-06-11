@@ -64,11 +64,11 @@ module.exports = {
       name: "shell",
       remotes: {
         // Component MFEs (can be embedded anywhere)
-        headerMfe: `headerMfe@${getRemoteUrl(3001, "header-mfe")}`,
+        headerMfe: `headerMfe@${getRemoteUrl(3001, "mfe/header-mfe")}`,
 
         // Page MFEs (full page applications)
-        productsMfe: `productsMfe@${getRemoteUrl(3002, "products-mfe")}`,
-        ordersMfe: `ordersMfe@${getRemoteUrl(3003, "orders-mfe")}`,
+        productsMfe: `productsMfe@${getRemoteUrl(3002, "mfe/products-mfe")}`,
+        ordersMfe: `ordersMfe@${getRemoteUrl(3003, "mfe/orders-mfe")}`,
       },
       shared: {
         react: {
