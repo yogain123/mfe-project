@@ -9,48 +9,52 @@ This project demonstrates a complete **Micro Frontend (MFE) architecture** using
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                        SHELL APP                            │
-│                     (Port: 3000)                           │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │              HEADER MFE (Component)                 │   │
-│  │                 (Port: 3001)                       │   │
-│  └─────────────────────────────────────────────────────┘   │
+│                     (Port: 3000)                            │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │              HEADER MFE (Component)                 │    │
+│  │                 (Port: 3001)                        │    │
+│  └─────────────────────────────────────────────────────┘    │
 │                                                             │
-│  ┌─────────────────┐  ┌─────────────────┐                 │
-│  │   PRODUCTS MFE  │  │   ORDERS MFE    │                 │
-│  │   (Full Page)   │  │   (Full Page)   │                 │
-│  │   Port: 3002    │  │   Port: 3003    │                 │
-│  └─────────────────┘  └─────────────────┘                 │
+│  ┌─────────────────┐  ┌─────────────────┐                   │
+│  │   PRODUCTS MFE  │  │   ORDERS MFE    │                   │
+│  │   (Full Page)   │  │   (Full Page)   │                   │
+│  │   Port: 3002    │  │   Port: 3003    │                   │
+│  └─────────────────┘  └─────────────────┘                   │
 │                                                             │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │         USER PROFILE MFE (Component)                │   │
-│  │              (Port: 3004)                          │   │
-│  │    (Can be embedded in other MFEs)                 │   │
-│  └─────────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │         USER PROFILE MFE (Component)                │    │
+│  │              (Port: 3004)                           │    │
+│  │    (Can be embedded in other MFEs)                  │    │
+│  └─────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ## 🧩 MFE Types Covered
 
 ### 1. **Shell App** (Container/Host)
+
 - **Purpose**: Main orchestrator that loads and manages all MFEs
 - **Port**: 3000
-- **Responsibilities**: 
+- **Responsibilities**:
   - Routing between MFEs
   - Shared state management
   - Common layout structure
   - Loading remote MFEs
 
 ### 2. **Component MFEs** (Shared Components)
+
 - **Header MFE** (Port: 3001): Navigation component used across the shell
 - **User Profile MFE** (Port: 3004): Reusable profile component that can be embedded anywhere
 
 ### 3. **Page MFEs** (Full Page Applications)
+
 - **Products MFE** (Port: 3002): Complete product management application
 - **Orders MFE** (Port: 3003): Complete order management application
 
 ## 🔧 Key Concepts Demonstrated
 
 ### Module Federation Patterns:
+
 1. **Host-Remote Pattern**: Shell consumes remote MFEs
 2. **Bidirectional Sharing**: MFEs can consume components from each other
 3. **Shared Dependencies**: React, React-DOM shared across all MFEs
@@ -58,6 +62,7 @@ This project demonstrates a complete **Micro Frontend (MFE) architecture** using
 5. **Error Boundaries**: Graceful fallbacks when MFEs fail to load
 
 ### Production Patterns:
+
 1. **Independent Deployment**: Each MFE can be deployed separately
 2. **Version Management**: Semantic versioning for MFE compatibility
 3. **Build Optimization**: Separate builds with shared chunks
@@ -67,10 +72,12 @@ This project demonstrates a complete **Micro Frontend (MFE) architecture** using
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 16+ 
+
+- Node.js 16+
 - npm 7+
 
 ### Installation
+
 ```bash
 # Install all dependencies for all MFEs
 npm run install:all
@@ -85,6 +92,7 @@ npm run install:profile
 ```
 
 ### Development
+
 ```bash
 # Start all MFEs in development mode
 npm run dev
@@ -98,6 +106,7 @@ npm run dev:profile  # User Profile MFE on port 3004
 ```
 
 ### Production Build
+
 ```bash
 # Build all MFEs
 npm run build
@@ -107,6 +116,7 @@ npm start
 ```
 
 ### Deployment to S3
+
 ```bash
 # Deploy all MFEs to S3
 npm run deploy
@@ -125,7 +135,7 @@ mfe-project/
 ├── README.md                   # This file
 ├── shell/                      # Shell/Host Application
 │   ├── webpack.config.js       # Module Federation config
-│   ├── package.json           
+│   ├── package.json
 │   └── src/
 ├── header-mfe/                 # Header Component MFE
 │   ├── webpack.config.js
@@ -148,16 +158,19 @@ mfe-project/
 ## 🎓 Learning Path
 
 ### Beginner Level
+
 1. **Start the Shell**: Understand how the main container works
 2. **Component MFE**: See how Header MFE is loaded as a component
 3. **Page MFE**: Navigate to Products/Orders to see full-page MFEs
 
 ### Intermediate Level
+
 1. **Module Federation Config**: Study webpack.config.js files
 2. **Shared Dependencies**: Understand how React is shared
 3. **Error Boundaries**: See fallback mechanisms in action
 
 ### Advanced Level
+
 1. **Cross-MFE Communication**: Profile MFE embedded in Products MFE
 2. **State Management**: Shared state between MFEs
 3. **Production Deployment**: S3 deployment with proper caching
@@ -165,37 +178,39 @@ mfe-project/
 ## 🔍 How It Works
 
 ### Module Federation Magic
+
 ```javascript
 // In Shell (Host)
 new ModuleFederationPlugin({
-  name: 'shell',
+  name: "shell",
   remotes: {
-    headerMfe: 'headerMfe@http://localhost:3001/remoteEntry.js',
-    productsMfe: 'productsMfe@http://localhost:3002/remoteEntry.js'
-  }
-})
+    headerMfe: "headerMfe@http://localhost:3001/remoteEntry.js",
+    productsMfe: "productsMfe@http://localhost:3002/remoteEntry.js",
+  },
+});
 
 // In Header MFE (Remote)
 new ModuleFederationPlugin({
-  name: 'headerMfe',
-  filename: 'remoteEntry.js',
+  name: "headerMfe",
+  filename: "remoteEntry.js",
   exposes: {
-    './Header': './src/Header'
-  }
-})
+    "./Header": "./src/Header",
+  },
+});
 ```
 
 ### Runtime Loading
+
 ```javascript
 // Dynamic import in Shell
-const HeaderMfe = React.lazy(() => import('headerMfe/Header'));
+const HeaderMfe = React.lazy(() => import("headerMfe/Header"));
 
 // With error boundary and suspense
 <ErrorBoundary fallback={<div>Header failed to load</div>}>
   <Suspense fallback={<div>Loading header...</div>}>
     <HeaderMfe />
   </Suspense>
-</ErrorBoundary>
+</ErrorBoundary>;
 ```
 
 ## 🌟 Production Features
@@ -218,6 +233,7 @@ const HeaderMfe = React.lazy(() => import('headerMfe/Header'));
 ## 📚 Next Steps
 
 After mastering this setup, explore:
+
 - **State Management**: Redux/Zustand across MFEs
 - **Authentication**: Shared auth across MFEs
 - **Testing**: E2E testing for MFE architecture
@@ -228,4 +244,4 @@ After mastering this setup, explore:
 
 **Happy Learning! 🎉**
 
-This project covers everything you need to understand Micro Frontend architecture in a production environment. 
+This project covers everything you need to understand Micro Frontend architecture in a production environment.
