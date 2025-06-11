@@ -1,4 +1,4 @@
-require("dotenv").config({ path: "../.  " });
+require("dotenv").config({ path: "../.env" });
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 
@@ -6,11 +6,15 @@ const isProduction = process.env.NODE_ENV === "production";
 
 // Environment-based URLs for MFEs
 const getRemoteUrl = (port, name) => {
-  if (isProduction) {
+  if (isProduction || true) {
     // Pull from S3 bucket for production
-    const url = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${name}/remoteEntry.js`;
-    console.log("url", url);
-    return url;
+    const s3Url = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${name}/remoteEntry.js`;
+    console.log("s3Url", s3Url);
+
+    const cloudFrontUrl = `https://${process.env.CLOUD_FRONT_DISTRIBUTION_ID}.cloudfront.net/${name}/remoteEntry.js`;
+    console.log("cloudFrontUrl", cloudFrontUrl);
+
+    return cloudFrontUrl;
   }
 
   return `http://localhost:${port}/remoteEntry.js`;
