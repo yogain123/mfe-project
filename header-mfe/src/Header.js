@@ -139,6 +139,38 @@ const Header = () => {
           </span>
         </div>
       </div>
+
+      {/* MFE Footer */}
+      <div
+        style={{
+          backgroundColor: "#6f42c1",
+          color: "white",
+          padding: "10px",
+          textAlign: "center",
+          fontSize: "12px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "15px",
+            flexWrap: "wrap",
+          }}
+        >
+          <span>
+            <strong>🎯 Header MFE</strong>
+          </span>
+          <span style={{ opacity: "0.9" }}>
+            Port: 3001 | Type: Component MFE | Framework: React
+          </span>
+          <span style={{ opacity: "0.8" }}>Module Federation</span>
+        </div>
+        <div style={{ marginTop: "6px", fontSize: "9px", opacity: "0.5" }}>
+          🌐 window.mfeEventBus | User: {user?.name || "null"}
+        </div>
+      </div>
     </header>
   );
 };

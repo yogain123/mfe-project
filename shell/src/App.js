@@ -90,6 +90,69 @@ const AppContent = () => {
             update everywhere!
           </p>
         </div>
+
+        {/* Footer */}
+        <footer
+          style={{
+            backgroundColor: "#343a40",
+            color: "white",
+            padding: "20px",
+            marginTop: "40px",
+            textAlign: "center",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              flexWrap: "wrap",
+              gap: "20px",
+            }}
+          >
+            <div>
+              <h5>🏠 Shell Application</h5>
+              <p>Port: 3000</p>
+              <p>Type: Container/Shell</p>
+              <p>Framework: React</p>
+            </div>
+            <div>
+              <h5>🎯 Header MFE</h5>
+              <p>Port: 3001</p>
+              <p>Type: Component MFE</p>
+              <p>Framework: React</p>
+            </div>
+            <div>
+              <h5>📦 Products MFE</h5>
+              <p>Port: 3002</p>
+              <p>Type: Page MFE</p>
+              <p>Framework: React</p>
+            </div>
+            <div>
+              <h5>📋 Orders MFE</h5>
+              <p>Port: 3003</p>
+              <p>Type: Page MFE</p>
+              <p>Framework: React</p>
+            </div>
+            <div>
+              <h5>👤 User Profile MFE</h5>
+              <p>Port: 3004</p>
+              <p>Type: Component MFE</p>
+              <p>Framework: React</p>
+            </div>
+          </div>
+          <hr style={{ margin: "20px 0", borderColor: "#6c757d" }} />
+
+          <div
+            style={{ fontSize: "11px", opacity: "0.7", marginBottom: "10px" }}
+          >
+            🌐 Global APIs: window.mfeEventBus | window.mfeGlobalContext | User:{" "}
+            {user?.name || "null"}
+          </div>
+
+          <p style={{ margin: "0", fontSize: "12px", opacity: "0.8" }}>
+            Micro Frontend Architecture Demo - Module Federation with Webpack 5
+          </p>
+        </footer>
       </Router>
     </div>
   );

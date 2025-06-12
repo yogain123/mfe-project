@@ -130,6 +130,40 @@ const UserProfile = ({ user }) => {
         <div className="mfe-info">
           <small>👤 User Profile MFE :3004</small>
         </div>
+
+        {/* MFE Footer */}
+        <div
+          style={{
+            backgroundColor: "#fd7e14",
+            color: "white",
+            padding: "10px",
+            marginTop: "15px",
+            textAlign: "center",
+            borderRadius: "6px",
+            fontSize: "11px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+              flexWrap: "wrap",
+            }}
+          >
+            <span>
+              <strong>👤 User Profile MFE</strong>
+            </span>
+            <span style={{ opacity: "0.9" }}>
+              Port: 3004 | Type: Component MFE
+            </span>
+            <span style={{ opacity: "0.8" }}>Module Federation</span>
+          </div>
+          <div style={{ marginTop: "6px", fontSize: "9px", opacity: "0.5" }}>
+            🌐 window.mfeEventBus | User: {user?.name || "null"}
+          </div>
+        </div>
       </div>
     </div>
   );

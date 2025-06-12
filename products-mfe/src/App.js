@@ -220,6 +220,42 @@ const App = () => {
           </strong>
         </p>
       </div>
+
+      {/* MFE Footer */}
+      <footer
+        style={{
+          backgroundColor: "#007bff",
+          color: "white",
+          padding: "15px",
+          marginTop: "30px",
+          textAlign: "center",
+          borderRadius: "8px",
+          margin: "30px 16px 16px 16px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "20px",
+            flexWrap: "wrap",
+          }}
+        >
+          <div>
+            <strong>📦 Products MFE</strong>
+          </div>
+          <div style={{ fontSize: "14px", opacity: "0.9" }}>
+            Port: 3002 | Type: Page MFE | Framework: React
+          </div>
+          <div style={{ fontSize: "12px", opacity: "0.8" }}>
+            Module Federation
+          </div>
+        </div>
+        <div style={{ marginTop: "8px", fontSize: "10px", opacity: "0.6" }}>
+          🌐 window.mfeEventBus | User: {user?.name || "null"}
+        </div>
+      </footer>
     </div>
   );
 };
