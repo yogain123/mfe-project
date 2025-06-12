@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
+import UserApiService from "./userApiService";
 
 const UserProfile = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -18,20 +19,27 @@ const UserProfile = ({ user }) => {
     });
   }, [user]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const hasChanges =
       formData.name !== user?.name ||
       formData.email !== user?.email ||
       formData.role !== user?.role;
 
     if (hasChanges) {
-      // Update user context via Shell using the event system
-      if (window.mfeEventBus) {
-        window.mfeEventBus.emit("user:update", {
+      try {
+        // User Profile MFE makes its own API call
+        await UserApiService.updateUserAndNotify({
           name: formData.name.trim(),
           email: formData.email.trim(),
           role: formData.role.trim(),
         });
+        console.log("🔄 User Profile MFE: User update completed successfully");
+      } catch (error) {
+        console.error(
+          "❌ User Profile MFE: Failed to update user:",
+          error.message
+        );
+        // Could show user-friendly error message here
       }
     }
 

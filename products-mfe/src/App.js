@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./styles.css";
 import ErrorBoundary from "./ErrorBoundary";
 import ProductList from "./ProductList";
+import UserApiService from "./userApiService";
 
 // Import User Profile MFE
 const UserProfileMfe = React.lazy(() => import("userProfileMfe/UserProfile"));
@@ -125,9 +126,14 @@ const App = () => {
     }
   }, []);
 
-  const updateUser = (updates) => {
-    if (window.mfeEventBus) {
-      window.mfeEventBus.emit("user:update", updates);
+  const updateUser = async (updates) => {
+    try {
+      // Products MFE makes its own API call
+      await UserApiService.updateUserAndNotify(updates);
+      console.log("🔄 Products MFE: User update completed successfully");
+    } catch (error) {
+      console.error("❌ Products MFE: Failed to update user:", error.message);
+      // Could show user-friendly error message here
     }
   };
 

@@ -19,6 +19,13 @@ class EventBus {
     };
   }
 
+  // Unsubscribe from an event
+  off(event, callback) {
+    if (this.events[event]) {
+      this.events[event] = this.events[event].filter((cb) => cb !== callback);
+    }
+  }
+
   // Emit an event
   emit(event, data) {
     if (this.events[event]) {

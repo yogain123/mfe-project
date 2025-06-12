@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./styles.css";
 import OrderList from "./OrderList";
+import UserApiService from "./userApiService";
 
 // Email Editor Component
 const EmailEditor = ({ user, updateUser }) => {
@@ -128,9 +129,14 @@ const App = () => {
     }
   }, []);
 
-  const updateUser = (updates) => {
-    if (window.mfeEventBus) {
-      window.mfeEventBus.emit("user:update", updates);
+  const updateUser = async (updates) => {
+    try {
+      // Orders MFE makes its own API call
+      await UserApiService.updateUserAndNotify(updates);
+      console.log("🔄 Orders MFE: User update completed successfully");
+    } catch (error) {
+      console.error("❌ Orders MFE: Failed to update user:", error.message);
+      // Could show user-friendly error message here
     }
   };
 
