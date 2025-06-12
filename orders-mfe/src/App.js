@@ -3,6 +3,106 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./styles.css";
 import OrderList from "./OrderList";
 
+// Email Editor Component
+const EmailEditor = ({ user, updateUser }) => {
+  const [email, setEmail] = useState(user?.email || "");
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    setEmail(user?.email || "");
+  }, [user?.email]);
+
+  const handleSave = () => {
+    if (email.trim() && email !== user.email) {
+      updateUser({ email: email.trim() });
+      setIsEditing(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setEmail(user?.email || "");
+    setIsEditing(false);
+  };
+
+  return (
+    <div
+      style={{
+        padding: "12px",
+        backgroundColor: "#e8f5e8",
+        borderRadius: "6px",
+        margin: "12px 0",
+        border: "1px solid #28a745",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+        }}
+      >
+        <span>📧 Email:</span>
+        {isEditing ? (
+          <>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{
+                padding: "4px 8px",
+                borderRadius: "4px",
+                border: "1px solid #ddd",
+                minWidth: "200px",
+              }}
+              placeholder="Enter email address"
+            />
+            <button
+              onClick={handleSave}
+              style={{
+                padding: "4px 8px",
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+              }}
+            >
+              Save
+            </button>
+            <button
+              onClick={handleCancel}
+              style={{
+                padding: "4px 8px",
+                backgroundColor: "#6c757d",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+              }}
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <strong>{user?.email}</strong>
+            <button
+              onClick={() => setIsEditing(true)}
+              style={{
+                padding: "4px 8px",
+                backgroundColor: "#17a2b8",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+              }}
+            >
+              Edit
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,6 +127,12 @@ const App = () => {
       return unsubscribeUser;
     }
   }, []);
+
+  const updateUser = (updates) => {
+    if (window.mfeEventBus) {
+      window.mfeEventBus.emit("user:update", updates);
+    }
+  };
 
   const isActive = (path) => {
     const currentPath = location.pathname.replace("/orders", "") || "/";
@@ -55,6 +161,9 @@ const App = () => {
         )}
       </div>
 
+      {/* Email Editor */}
+      {user && <EmailEditor user={user} updateUser={updateUser} />}
+
       {/* Navigation */}
       <nav className="orders-nav">
         <button
@@ -77,8 +186,12 @@ const App = () => {
         <h4>🎓 Orders MFE</h4>
         <p>
           <strong>User:</strong> {user?.name || "Loading..."} |
+          <strong> Email:</strong> {user?.email || "Loading..."} |
           <strong> Type:</strong> Page MFE |<strong> Context:</strong> Shared
           via events
+        </p>
+        <p style={{ fontSize: "12px", opacity: "0.8", marginTop: "5px" }}>
+          💡 Edit email above to see real-time updates across all MFEs!
         </p>
       </div>
 

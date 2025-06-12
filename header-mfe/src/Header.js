@@ -99,7 +99,14 @@ const Header = () => {
               }}
             >
               <span style={{ fontSize: "16px" }}>{user.avatar}</span>
-              <span style={{ fontWeight: "500" }}>{user.name}</span>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "2px" }}
+              >
+                <span style={{ fontWeight: "500" }}>{user.name}</span>
+                <span style={{ fontSize: "11px", opacity: "0.7" }}>
+                  {user.email}
+                </span>
+              </div>
             </div>
           )}
 
@@ -135,7 +142,7 @@ const Header = () => {
           <span className="info-text">
             💡 <strong>Component MFE</strong> with{" "}
             <strong>Shared Context</strong>
-            {user && ` - Current User: ${user.name}`}
+            {user && ` - User: ${user.name} (${user.email})`}
           </span>
         </div>
       </div>
