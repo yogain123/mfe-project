@@ -160,13 +160,16 @@ const App = () => {
             <button
               onClick={() => setShowProfile(!showProfile)}
               style={{
-                padding: "6px 12px",
-                backgroundColor: "#f8f9fa",
-                border: "1px solid #ddd",
+                padding: "8px 12px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
                 borderRadius: "4px",
+                cursor: "pointer",
               }}
             >
-              {user?.avatar} {user?.name}
+              {user?.avatar} {user?.name} -{" "}
+              {showProfile ? "Close" : "View Profile"}
             </button>
             <span style={{ fontSize: "12px", opacity: 0.7 }}>
               Products MFE :3002
