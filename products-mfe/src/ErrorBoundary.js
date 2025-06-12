@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -11,7 +11,7 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('Products MFE Error Boundary:', error, errorInfo);
+    console.error("Products MFE Error Boundary:", error, errorInfo);
     this.setState({ error: error });
   }
 
@@ -25,7 +25,9 @@ class ErrorBoundary extends React.Component {
         <div className="error-boundary">
           <h3>🚨 Something went wrong in Products MFE</h3>
           <p>Error: {this.state.error?.message}</p>
-          <button onClick={() => this.setState({ hasError: false, error: null })}>
+          <button
+            onClick={() => this.setState({ hasError: false, error: null })}
+          >
             Try Again
           </button>
         </div>
@@ -36,4 +38,4 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-export default ErrorBoundary; 
+export default ErrorBoundary;

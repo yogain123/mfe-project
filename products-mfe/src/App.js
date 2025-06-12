@@ -1,10 +1,8 @@
 import React, { Suspense, useState, useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./styles.css";
-import ErrorBoundary from "./components/ErrorBoundary";
-import ProductList from "./components/ProductList";
-import ProductDetail from "./components/ProductDetail";
-import AddProduct from "./components/AddProduct";
+import ErrorBoundary from "./ErrorBoundary";
+import ProductList from "./ProductList";
 
 // Import User Profile MFE
 const UserProfileMfe = React.lazy(() => import("userProfileMfe/UserProfile"));
@@ -202,20 +200,12 @@ const App = () => {
         >
           📋 All Products
         </button>
-        <button
-          className={`nav-btn ${isActive("/add") ? "active" : ""}`}
-          onClick={() => navigate("/products/add")}
-        >
-          ➕ Add Product
-        </button>
       </nav>
 
       {/* Main Content */}
       <main className="products-content">
         <Routes>
           <Route path="/" element={<ProductList />} />
-          <Route path="/add" element={<AddProduct />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
         </Routes>
       </main>
 

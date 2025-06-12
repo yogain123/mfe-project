@@ -5,9 +5,9 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import ErrorBoundary from "./components/ErrorBoundary";
-import AppContext, { AppContextProvider } from "./context/AppContext";
-import "./utils/EventBus"; // Initialize event bus
+import ErrorBoundary from "./ErrorBoundary";
+import AppContext, { AppContextProvider } from "./AppContext";
+import "./EventBus"; // Initialize event bus
 
 // Lazy load MFE components
 const HeaderMfe = React.lazy(() => import("headerMfe/Header"));

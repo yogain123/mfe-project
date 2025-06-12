@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./styles.css";
-import OrderList from "./components/OrderList";
-import OrderDetail from "./components/OrderDetail";
+import OrderList from "./OrderList";
 
 const App = () => {
   const navigate = useNavigate();
@@ -64,15 +63,12 @@ const App = () => {
         >
           📋 All Orders
         </button>
-        <button className="nav-btn">📊 Analytics</button>
-        <button className="nav-btn">⚙️ Settings</button>
       </nav>
 
       {/* Main Content */}
       <main className="orders-content">
         <Routes>
           <Route path="/" element={<OrderList />} />
-          <Route path="/order/:id" element={<OrderDetail />} />
         </Routes>
       </main>
 
