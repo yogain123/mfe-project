@@ -1,30 +1,140 @@
-import React, { Suspense, useState } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import './styles.css';
-import ErrorBoundary from './components/ErrorBoundary';
-import ProductList from './components/ProductList';
-import ProductDetail from './components/ProductDetail';
-import AddProduct from './components/AddProduct';
+import React, { Suspense, useState, useEffect } from "react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import "./styles.css";
+import ErrorBoundary from "./components/ErrorBoundary";
+import ProductList from "./components/ProductList";
+import ProductDetail from "./components/ProductDetail";
+import AddProduct from "./components/AddProduct";
 
-// Import User Profile MFE - This demonstrates MFE within MFE!
-const UserProfileMfe = React.lazy(() => import('userProfileMfe/UserProfile'));
+// Import User Profile MFE
+const UserProfileMfe = React.lazy(() => import("userProfileMfe/UserProfile"));
+
+// Simple User Editor Component
+const UserEditor = ({ user, updateUser }) => {
+  const [username, setUsername] = useState(user?.name || "");
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    setUsername(user?.name || "");
+  }, [user?.name]);
+
+  const handleSave = () => {
+    if (username.trim() && username !== user.name) {
+      updateUser({ name: username.trim() });
+      setIsEditing(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setUsername(user?.name || "");
+    setIsEditing(false);
+  };
+
+  return (
+    <div
+      style={{
+        padding: "12px",
+        backgroundColor: "#f8f9fa",
+        borderRadius: "6px",
+        margin: "12px 0",
+        backgroundColor: "lightblue",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+        }}
+      >
+        <span>👤 User:</span>
+        {isEditing ? (
+          <>
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              style={{
+                padding: "4px 8px",
+                borderRadius: "4px",
+                border: "1px solid #ddd",
+              }}
+            />
+            <button
+              onClick={handleSave}
+              style={{
+                padding: "4px 8px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+              }}
+            >
+              Save
+            </button>
+            <button
+              onClick={handleCancel}
+              style={{
+                padding: "4px 8px",
+                backgroundColor: "#6c757d",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+              }}
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <strong>{user?.name}</strong>
+            <button
+              onClick={() => setIsEditing(true)}
+              style={{
+                padding: "4px 8px",
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+              }}
+            >
+              Edit
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showProfile, setShowProfile] = useState(false);
+  const [user, setUser] = useState(null);
 
-  // Mock user data
-  const currentUser = {
-    id: 1,
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    role: 'Product Manager',
-    avatar: '👨‍💼'
+  useEffect(() => {
+    if (window.mfeEventBus) {
+      // Get initial context
+      const context = window.mfeGlobalContext;
+      if (context) {
+        setUser(context.user);
+      }
+
+      // Listen for user updates
+      window.mfeEventBus.on("user:updated", (userData) => {
+        setUser(userData);
+      });
+    }
+  }, []);
+
+  const updateUser = (updates) => {
+    if (window.mfeEventBus) {
+      window.mfeEventBus.emit("user:update", updates);
+    }
   };
 
   const isActive = (path) => {
-    const currentPath = location.pathname.replace('/products', '') || '/';
+    const currentPath = location.pathname.replace("/products", "") || "/";
     return currentPath === path;
   };
 
@@ -32,43 +142,53 @@ const App = () => {
     <div className="products-mfe">
       {/* MFE Header */}
       <div className="mfe-header">
-        <div className="mfe-info">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <h1>📦 Products Management</h1>
-          <div className="mfe-badge">
-            <span>Products MFE</span>
-            <span className="port">:3002</span>
-          </div>
-        </div>
-        
-        {/* User Profile Toggle - Demonstrates Component MFE within Page MFE */}
-        <div className="user-section">
-          <button 
-            className="profile-toggle"
-            onClick={() => setShowProfile(!showProfile)}
-          >
-            {currentUser.avatar} {currentUser.name}
-            {showProfile ? ' ▼' : ' ▶'}
-          </button>
-        </div>
-      </div>
-
-      {/* User Profile MFE - Component within MFE */}
-      {showProfile && (
-        <div className="embedded-profile">
-          <div className="profile-header">
-            <h3>👤 User Profile (Embedded MFE)</h3>
-            <span className="learning-note">
-              💡 This profile component is loaded from User Profile MFE (port 3004)
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            <button
+              onClick={() => setShowProfile(!showProfile)}
+              style={{
+                padding: "6px 12px",
+                backgroundColor: "#f8f9fa",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+              }}
+            >
+              {user?.avatar} {user?.name}
+            </button>
+            <span style={{ fontSize: "12px", opacity: 0.7 }}>
+              Products MFE :3002
             </span>
           </div>
-          <ErrorBoundary fallback={
-            <div className="profile-error">
-              <p>❌ User Profile MFE failed to load</p>
-              <p>This demonstrates graceful degradation when embedded MFEs fail</p>
-            </div>
-          }>
-            <Suspense fallback={<div className="loading">Loading User Profile MFE...</div>}>
-              <UserProfileMfe user={currentUser} />
+        </div>
+
+        {/* User Editor */}
+        {user && <UserEditor user={user} updateUser={updateUser} />}
+      </div>
+
+      {/* Embedded User Profile MFE */}
+      {showProfile && (
+        <div
+          style={{
+            padding: "16px",
+            backgroundColor: "#fff",
+            border: "1px solid #ddd",
+            margin: "16px",
+            borderRadius: "8px",
+          }}
+        >
+          <h3>👤 User Profile (Embedded MFE)</h3>
+          <ErrorBoundary
+            fallback={<div>❌ User Profile MFE failed to load</div>}
+          >
+            <Suspense fallback={<div>Loading User Profile MFE...</div>}>
+              <UserProfileMfe user={user} />
             </Suspense>
           </ErrorBoundary>
         </div>
@@ -76,15 +196,15 @@ const App = () => {
 
       {/* Navigation */}
       <nav className="products-nav">
-        <button 
-          className={`nav-btn ${isActive('/') ? 'active' : ''}`}
-          onClick={() => navigate('/products')}
+        <button
+          className={`nav-btn ${isActive("/") ? "active" : ""}`}
+          onClick={() => navigate("/products")}
         >
           📋 All Products
         </button>
-        <button 
-          className={`nav-btn ${isActive('/add') ? 'active' : ''}`}
-          onClick={() => navigate('/products/add')}
+        <button
+          className={`nav-btn ${isActive("/add") ? "active" : ""}`}
+          onClick={() => navigate("/products/add")}
         >
           ➕ Add Product
         </button>
@@ -99,19 +219,19 @@ const App = () => {
         </Routes>
       </main>
 
-      {/* Learning Info */}
+      {/* Simple Learning Info */}
       <div className="learning-info">
-        <h4>🎓 Learning Points:</h4>
-        <ul>
-          <li><strong>Page MFE:</strong> This entire application is loaded when you navigate to /products in the Shell</li>
-          <li><strong>Independent Routing:</strong> Has its own internal routing (/products/add, /products/product/1, etc.)</li>
-          <li><strong>MFE within MFE:</strong> User Profile component is loaded from another MFE (port 3004)</li>
-          <li><strong>Error Boundaries:</strong> Graceful handling when embedded MFEs fail to load</li>
-          <li><strong>Shared Dependencies:</strong> React, React-DOM, React-Router shared with Shell and other MFEs</li>
-        </ul>
+        <h4>🎓 Products MFE</h4>
+        <p>
+          <strong>User:</strong> {user?.name || "Loading..."} |
+          <strong>
+            {" "}
+            Edit user above to see real-time updates across all MFEs!
+          </strong>
+        </p>
       </div>
     </div>
   );
 };
 
-export default App; 
+export default App;

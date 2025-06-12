@@ -1,15 +1,38 @@
-import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import './styles.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import "./styles.css";
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (window.mfeEventBus) {
+      // Get initial context
+      const context = window.mfeGlobalContext;
+      if (context) {
+        setUser(context.user);
+      }
+
+      // Listen for user updates
+      const unsubscribe = window.mfeEventBus.on("user:updated", setUser);
+      return unsubscribe;
+    }
+  }, []);
 
   const navigationItems = [
-    { path: '/products', label: '📦 Products', description: 'Product Management MFE' },
-    { path: '/orders', label: '📋 Orders', description: 'Order Management MFE' }
+    {
+      path: "/products",
+      label: "📦 Products",
+      description: "Product Management MFE",
+    },
+    {
+      path: "/orders",
+      label: "📋 Orders",
+      description: "Order Management MFE",
+    },
   ];
 
   const handleNavigation = (path) => {
@@ -26,9 +49,7 @@ const Header = () => {
       <div className="header-container">
         {/* Logo/Brand */}
         <div className="header-brand">
-          <h1 className="brand-title">
-            🏗️ MFE Architecture
-          </h1>
+          <h1 className="brand-title">🏗️ MFE Architecture</h1>
           <span className="brand-subtitle">Learning Project</span>
         </div>
 
@@ -39,7 +60,9 @@ const Header = () => {
               <button
                 key={item.path}
                 onClick={() => handleNavigation(item.path)}
-                className={`nav-item ${isActive(item.path) ? 'nav-item-active' : ''}`}
+                className={`nav-item ${
+                  isActive(item.path) ? "nav-item-active" : ""
+                }`}
                 title={item.description}
               >
                 {item.label}
@@ -48,19 +71,43 @@ const Header = () => {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             className="mobile-menu-toggle"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle navigation menu"
           >
-            {isMenuOpen ? '✕' : '☰'}
+            {isMenuOpen ? "✕" : "☰"}
           </button>
         </nav>
 
-        {/* MFE Info Badge */}
-        <div className="mfe-badge">
-          <span className="badge-text">Header MFE</span>
-          <span className="badge-port">:3001</span>
+        {/* Right Side - User Info & MFE Badge */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {/* User Info - Clean display from Shell Context */}
+          {user && (
+            <div
+              className="user-info"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "6px 12px",
+                backgroundColor: "#f8f9fa",
+                border: "1px solid #dee2e6",
+                borderRadius: "20px",
+                fontSize: "13px",
+                color: "#495057",
+              }}
+            >
+              <span style={{ fontSize: "16px" }}>{user.avatar}</span>
+              <span style={{ fontWeight: "500" }}>{user.name}</span>
+            </div>
+          )}
+
+          {/* MFE Info Badge - Smaller */}
+          <div className="mfe-badge" style={{ fontSize: "11px", opacity: 0.7 }}>
+            <span className="badge-text">Header MFE</span>
+            <span className="badge-port">:3001</span>
+          </div>
         </div>
       </div>
 
@@ -71,7 +118,9 @@ const Header = () => {
             <button
               key={item.path}
               onClick={() => handleNavigation(item.path)}
-              className={`mobile-nav-item ${isActive(item.path) ? 'mobile-nav-item-active' : ''}`}
+              className={`mobile-nav-item ${
+                isActive(item.path) ? "mobile-nav-item-active" : ""
+              }`}
             >
               <div className="mobile-nav-label">{item.label}</div>
               <div className="mobile-nav-description">{item.description}</div>
@@ -80,15 +129,13 @@ const Header = () => {
         </div>
       )}
 
-      {/* Learning Info Bar */}
+      {/* Simplified Learning Info Bar */}
       <div className="learning-info-bar">
         <div className="info-container">
           <span className="info-text">
-            💡 <strong>Learning Point:</strong> This header is a <strong>Component MFE</strong> 
-            loaded from port 3001 and shared across all pages in the Shell app
-          </span>
-          <span className="info-status">
-            Status: <span className="status-loaded">Loaded via Module Federation</span>
+            💡 <strong>Component MFE</strong> with{" "}
+            <strong>Shared Context</strong>
+            {user && ` - Current User: ${user.name}`}
           </span>
         </div>
       </div>
@@ -96,4 +143,4 @@ const Header = () => {
   );
 };
 
-export default Header; 
+export default Header;

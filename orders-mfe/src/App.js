@@ -1,15 +1,36 @@
-import React, { useState } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import './styles.css';
-import OrderList from './components/OrderList';
-import OrderDetail from './components/OrderDetail';
+import React, { useState, useEffect } from "react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import "./styles.css";
+import OrderList from "./components/OrderList";
+import OrderDetail from "./components/OrderDetail";
 
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (window.mfeEventBus) {
+      // Get initial context
+      const context = window.mfeGlobalContext;
+      if (context) {
+        setUser(context.user);
+      }
+
+      // Listen for user updates
+      const unsubscribeUser = window.mfeEventBus.on(
+        "user:updated",
+        (userData) => {
+          setUser(userData);
+        }
+      );
+
+      return unsubscribeUser;
+    }
+  }, []);
 
   const isActive = (path) => {
-    const currentPath = location.pathname.replace('/orders', '') || '/';
+    const currentPath = location.pathname.replace("/orders", "") || "/";
     return currentPath === path;
   };
 
@@ -20,37 +41,31 @@ const App = () => {
         <div className="mfe-info">
           <h1>📋 Orders Management</h1>
           <div className="mfe-badge">
-            <span>Orders MFE</span>
-            <span className="port">:3003</span>
+            <span>Orders MFE :3003</span>
           </div>
         </div>
-        
-        <div className="stats-section">
-          <div className="stat-item">
-            <span className="stat-number">24</span>
-            <span className="stat-label">Total Orders</span>
+
+        {user && (
+          <div className="user-context">
+            <span>{user.avatar}</span>
+            <div>
+              <div>Welcome, {user.name}!</div>
+              <div>{user.role}</div>
+            </div>
           </div>
-          <div className="stat-item">
-            <span className="stat-number">$2,450</span>
-            <span className="stat-label">Revenue</span>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Navigation */}
       <nav className="orders-nav">
-        <button 
-          className={`nav-btn ${isActive('/') ? 'active' : ''}`}
-          onClick={() => navigate('/orders')}
+        <button
+          className={`nav-btn ${isActive("/") ? "active" : ""}`}
+          onClick={() => navigate("/orders")}
         >
           📋 All Orders
         </button>
-        <button className="nav-btn">
-          📊 Analytics
-        </button>
-        <button className="nav-btn">
-          ⚙️ Settings
-        </button>
+        <button className="nav-btn">📊 Analytics</button>
+        <button className="nav-btn">⚙️ Settings</button>
       </nav>
 
       {/* Main Content */}
@@ -61,19 +76,17 @@ const App = () => {
         </Routes>
       </main>
 
-      {/* Learning Info */}
+      {/* Simple Learning Info */}
       <div className="learning-info">
-        <h4>🎓 Learning Points:</h4>
-        <ul>
-          <li><strong>Page MFE:</strong> Complete standalone application loaded on /orders route</li>
-          <li><strong>Independent State:</strong> Manages its own order data and state</li>
-          <li><strong>Internal Routing:</strong> Has routes like /orders/order/123</li>
-          <li><strong>Isolated Styling:</strong> CSS scoped to this MFE only</li>
-          <li><strong>Shared Dependencies:</strong> Uses same React version as other MFEs</li>
-        </ul>
+        <h4>🎓 Orders MFE</h4>
+        <p>
+          <strong>User:</strong> {user?.name || "Loading..."} |
+          <strong> Type:</strong> Page MFE |<strong> Context:</strong> Shared
+          via events
+        </p>
       </div>
     </div>
   );
 };
 
-export default App; 
+export default App;

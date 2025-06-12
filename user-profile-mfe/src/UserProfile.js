@@ -1,133 +1,138 @@
-import React, { useState } from 'react';
-import './styles.css';
+import React, { useState, useEffect } from "react";
+import "./styles.css";
 
 const UserProfile = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    role: user?.role || ''
+    name: user?.name || "",
+    email: user?.email || "",
+    role: user?.role || "",
   });
 
+  // Update form data when user prop changes
+  useEffect(() => {
+    setFormData({
+      name: user?.name || "",
+      email: user?.email || "",
+      role: user?.role || "",
+    });
+  }, [user]);
+
   const handleSave = () => {
-    console.log('Saving user profile:', formData);
+    const hasChanges =
+      formData.name !== user?.name ||
+      formData.email !== user?.email ||
+      formData.role !== user?.role;
+
+    if (hasChanges) {
+      // Update user context via Shell using the event system
+      if (window.mfeEventBus) {
+        window.mfeEventBus.emit("user:update", {
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          role: formData.role.trim(),
+        });
+      }
+    }
+
     setIsEditing(false);
-    // In a real app, this would make an API call
   };
 
   const handleCancel = () => {
     setFormData({
-      name: user?.name || '',
-      email: user?.email || '',
-      role: user?.role || ''
+      name: user?.name || "",
+      email: user?.email || "",
+      role: user?.role || "",
     });
     setIsEditing(false);
   };
 
   if (!user) {
     return (
-      <div className="user-profile error">
-        <p>❌ No user data provided</p>
+      <div className="user-profile-container">
+        <div className="user-profile error">
+          <div className="error-content">
+            <span className="error-icon">⚠️</span>
+            <div>
+              <strong>No User Data</strong>
+              <p>Unable to load user profile information</p>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="user-profile">
-      <div className="profile-header">
-        <div className="avatar">
-          {user.avatar || '👤'}
-        </div>
-        <div className="mfe-info">
-          <span className="mfe-badge">User Profile MFE :3004</span>
-        </div>
-      </div>
-
-      <div className="profile-content">
-        {!isEditing ? (
-          <div className="profile-view">
-            <div className="field">
-              <label>Name:</label>
-              <span>{user.name}</span>
-            </div>
-            <div className="field">
-              <label>Email:</label>
-              <span>{user.email}</span>
-            </div>
-            <div className="field">
-              <label>Role:</label>
-              <span>{user.role}</span>
-            </div>
-            <div className="field">
-              <label>User ID:</label>
-              <span>#{user.id}</span>
-            </div>
-            
-            <button 
-              className="btn-edit"
-              onClick={() => setIsEditing(true)}
-            >
-              ✏️ Edit Profile
-            </button>
+    <div className="user-profile-container">
+      <div className="user-profile">
+        <div className="profile-header">
+          <div className="avatar">{user.avatar}</div>
+          <div className="user-info">
+            <h3>{user.name}</h3>
+            <p>{user.role}</p>
           </div>
-        ) : (
-          <div className="profile-edit">
-            <div className="field">
+          <button
+            className={`edit-btn ${isEditing ? "cancel" : "edit"}`}
+            onClick={() => (isEditing ? handleCancel() : setIsEditing(true))}
+          >
+            {isEditing ? "Cancel" : "Edit"}
+          </button>
+        </div>
+
+        {isEditing ? (
+          <div className="edit-form">
+            <div className="form-group">
               <label>Name:</label>
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
               />
             </div>
-            <div className="field">
+            <div className="form-group">
               <label>Email:</label>
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
               />
             </div>
-            <div className="field">
+            <div className="form-group">
               <label>Role:</label>
               <input
                 type="text"
                 value={formData.role}
-                onChange={(e) => setFormData({...formData, role: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, role: e.target.value })
+                }
               />
             </div>
-            
-            <div className="edit-actions">
-              <button className="btn-save" onClick={handleSave}>
-                ✅ Save
-              </button>
-              <button className="btn-cancel" onClick={handleCancel}>
-                ❌ Cancel
-              </button>
+            <button className="save-btn" onClick={handleSave}>
+              Save Changes
+            </button>
+          </div>
+        ) : (
+          <div className="profile-details">
+            <div className="detail-item">
+              <strong>Email:</strong> {user.email}
+            </div>
+            <div className="detail-item">
+              <strong>Role:</strong> {user.role}
             </div>
           </div>
         )}
-      </div>
 
-      <div className="profile-footer">
-        <div className="learning-note">
-          💡 <strong>Component MFE:</strong> This profile component is loaded from port 3004 
-          and can be embedded in any other MFE that needs user profile functionality.
-        </div>
-        
-        <div className="features">
-          <h4>🔧 Features:</h4>
-          <ul>
-            <li>✅ Reusable across multiple MFEs</li>
-            <li>✅ Independent state management</li>
-            <li>✅ Props-based data input</li>
-            <li>✅ Edit/view modes</li>
-            <li>✅ Isolated styling</li>
-          </ul>
+        <div className="mfe-info">
+          <small>👤 User Profile MFE :3004</small>
         </div>
       </div>
     </div>
   );
 };
 
-export default UserProfile; 
+export default UserProfile;
