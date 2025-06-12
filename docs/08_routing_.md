@@ -287,5 +287,3 @@ Routing in a Micro Frontend architecture involves coordination between the Shell
 By using nested routing instances (Shell's router wrapping the MFE's router), we achieve a flexible and independent navigation system where users can seamlessly move between major application sections (Shell routing) and specific views within those sections (MFE internal routing).
 
 With our application structure defined, components loaded, communication enabled, and routing handled, the next crucial topic is how to handle errors gracefully when one of our independent MFEs encounters a problem.
-
-[Next Chapter: Error Boundary](09_error_boundary_.md)

@@ -559,30 +559,6 @@
   margin: 20px;
 }
 
-/* Error Boundary */
-.error-boundary {
-  background: #f8d7da;
-  border: 1px solid #f5c6cb;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 20px;
-  color: #721c24;
-}
-
-.error-boundary h3 {
-  margin: 0 0 15px 0;
-}
-
-.error-boundary button {
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 15px;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .mfe-header {

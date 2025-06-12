@@ -62,5 +62,3 @@ flowchart TD
    ](07_inter_mfe_communication__event_bus___context__.md)
 8. [Routing
    ](08_routing_.md)
-9. [Error Boundary
-   ](09_error_boundary_.md)

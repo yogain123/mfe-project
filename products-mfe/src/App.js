@@ -1,7 +1,6 @@
 import React, { Suspense, useState, useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./styles.css";
-import ErrorBoundary from "./ErrorBoundary";
 import ProductList from "./ProductList";
 import UserApiService from "./userApiService";
 
@@ -188,13 +187,9 @@ const App = () => {
           }}
         >
           <h3>👤 User Profile (Embedded MFE)</h3>
-          <ErrorBoundary
-            fallback={<div>❌ User Profile MFE failed to load</div>}
-          >
-            <Suspense fallback={<div>Loading User Profile MFE...</div>}>
-              <UserProfileMfe user={user} />
-            </Suspense>
-          </ErrorBoundary>
+          <Suspense fallback={<div>Loading User Profile MFE...</div>}>
+            <UserProfileMfe user={user} />
+          </Suspense>
         </div>
       )}
 

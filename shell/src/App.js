@@ -5,7 +5,6 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import ErrorBoundary from "./ErrorBoundary";
 import AppContext, { AppContextProvider } from "./AppContext";
 import "./EventBus"; // Initialize event bus
 
@@ -66,11 +65,9 @@ const AppContent = () => {
         </div>
 
         {/* Header MFE */}
-        <ErrorBoundary fallback={<div>Header failed to load</div>}>
-          <Suspense fallback={<Loading message="Loading Header..." />}>
-            <HeaderMfe />
-          </Suspense>
-        </ErrorBoundary>
+        <Suspense fallback={<Loading message="Loading Header..." />}>
+          <HeaderMfe />
+        </Suspense>
 
         {/* Main Content */}
         <main style={{ minHeight: "calc(100vh - 120px)" }}>
@@ -80,26 +77,18 @@ const AppContent = () => {
             <Route
               path="/products/*"
               element={
-                <ErrorBoundary
-                  fallback={<div>Products MFE failed to load</div>}
-                >
-                  <Suspense
-                    fallback={<Loading message="Loading Products..." />}
-                  >
-                    <ProductsMfe />
-                  </Suspense>
-                </ErrorBoundary>
+                <Suspense fallback={<Loading message="Loading Products..." />}>
+                  <ProductsMfe />
+                </Suspense>
               }
             />
 
             <Route
               path="/orders/*"
               element={
-                <ErrorBoundary fallback={<div>Orders MFE failed to load</div>}>
-                  <Suspense fallback={<Loading message="Loading Orders..." />}>
-                    <OrdersMfe />
-                  </Suspense>
-                </ErrorBoundary>
+                <Suspense fallback={<Loading message="Loading Orders..." />}>
+                  <OrdersMfe />
+                </Suspense>
               }
             />
           </Routes>
