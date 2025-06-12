@@ -17,8 +17,7 @@ const Header = () => {
       }
 
       // Listen for user updates
-      const unsubscribe = window.mfeEventBus.on("user:updated", setUser);
-      return unsubscribe;
+      window.mfeEventBus.on("user:updated", setUser);
     }
   }, []);
 
@@ -46,6 +45,24 @@ const Header = () => {
 
   return (
     <header className="mfe-header">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          cursor: "pointer",
+        }}
+      >
+        <button
+          onClick={() => {
+            window.mfeEventBus.emit(
+              "update-title",
+              "Title Changed via event bus"
+            );
+          }}
+        >
+          click me to update Product title
+        </button>
+      </div>
       <div className="header-container">
         {/* Logo/Brand */}
         <div className="header-brand">

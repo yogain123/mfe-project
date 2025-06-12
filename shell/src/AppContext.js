@@ -62,23 +62,10 @@ export const AppContextProvider = ({ children }) => {
         updatedUserData
       );
       setUser(updatedUserData);
-      setError(null); // Clear any previous errors since update was successful
+      setError(null);
     };
 
-    // Listen for API errors from MFEs
-    const handleApiError = (errorInfo) => {
-      console.error("📡 Shell: Received API error from MFE:", errorInfo);
-      setError(errorInfo.message || "API Error");
-    };
-
-    window.mfeEventBus.on("user:data-updated", handleUserUpdated);
-    window.mfeEventBus.on("user:api-error", handleApiError);
-
-    // Cleanup listeners
-    return () => {
-      window.mfeEventBus.off("user:data-updated", handleUserUpdated);
-      window.mfeEventBus.off("user:api-error", handleApiError);
-    };
+    window.mfeEventBus.on("user:updated", handleUserUpdated);
   }, [user, loading, error]);
 
   // Broadcast user updates to all MFEs when data changes

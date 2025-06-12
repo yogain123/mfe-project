@@ -109,9 +109,12 @@ const App = () => {
   const location = useLocation();
   const [showProfile, setShowProfile] = useState(false);
   const [user, setUser] = useState(null);
-
+  const [title, setTitle] = useState("Products Management");
   useEffect(() => {
     if (window.mfeEventBus) {
+      window.mfeEventBus.on("update-title", (title) => {
+        setTitle(title);
+      });
       // Get initial context
       const context = window.mfeGlobalContext;
       if (context) {
@@ -152,7 +155,7 @@ const App = () => {
             alignItems: "center",
           }}
         >
-          <h1>📦 Products Management</h1>
+          <h1>📦 {title}</h1>
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             <button
               onClick={() => setShowProfile(!showProfile)}

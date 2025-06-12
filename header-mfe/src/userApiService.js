@@ -74,7 +74,7 @@ class UserApiService {
 
       // Notify all MFEs about the successful update
       if (window.mfeEventBus) {
-        window.mfeEventBus.emit("user:data-updated", apiResponse);
+        window.mfeEventBus.emit("user:updated", apiResponse);
         console.log("📡 Header MFE: Notified all MFEs about user update");
       }
 
