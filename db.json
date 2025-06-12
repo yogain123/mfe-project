@@ -1,18 +1,9 @@
 {
   "user": {
     "id": "yogendr_123",
-    "name": "pppp",
-    "email": "yaaa",
+    "name": "yogendra",
+    "email": "yogendrasaxena56@gmail.com",
     "role": "Senior Software Engineer",
-    "avatar": "👨",
-    "department": "Engineering",
-    "location": "Remote",
-    "joinDate": "2023-01-15",
-    "preferences": {
-      "theme": "light",
-      "notifications": true,
-      "language": "en"
-    },
-    "lastUpdated": "2025-06-12T08:05:31.654Z"
+    "avatar": "👨"
   }
 }
