@@ -36,3 +36,8 @@ This project demonstrates a complete **Micro Frontend (MFE) architecture** using
 **Happy Learning! 🎉**
 
 This project covers everything you need to understand Micro Frontend architecture in a production environment.
+
+<img width="1509" alt="Screenshot 2025-06-12 at 12 40 06 PM" src="https://github.com/user-attachments/assets/6053b0ba-573c-459f-a8fd-bb4eb2dac61c" />
+
+<img width="1512" alt="Screenshot 2025-06-12 at 12 39 52 PM" src="https://github.com/user-attachments/assets/6a74dc58-0430-49c7-a048-0f79336770e4" />
+
