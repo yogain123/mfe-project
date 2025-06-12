@@ -3,15 +3,8 @@
   "version": "1.0.0",
   "description": "Micro Frontend Architecture Learning Project with Webpack Module Federation",
   "private": true,
-  "workspaces": [
-    "shell",
-    "header-mfe",
-    "products-mfe",
-    "orders-mfe",
-    "user-profile-mfe"
-  ],
   "scripts": {
-    "install:all": "npm install && npm run install:shell && npm run install:header && npm run install:products && npm run install:orders && npm run install:profile",
+    "install:all": "npm run install:shell && npm run install:header && npm run install:products && npm run install:orders && npm run install:profile",
     "install:shell": "cd shell && npm install",
     "install:header": "cd header-mfe && npm install",
     "install:products": "cd products-mfe && npm install",
