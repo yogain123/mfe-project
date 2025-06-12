@@ -14,33 +14,6 @@ The Header MFE team? Same story.
 
 And the Shell application itself, which uses React to render these MFEs? Yep, it installs React and ReactDOM and bundles them into its own code.
 
-What happens when a user visits the Shell application and it loads the Header, Products, and Orders MFEs?
-
-```mermaid
-graph LR
-    UserBrowser["User's Browser"]
-    ShellApp["Shell App Bundle"]
-    HeaderMFE["Header MFE Bundle"]
-    ProductsMFE["Products MFE Bundle"]
-    OrdersMFE["Orders MFE Bundle"]
-
-    ShellApp --> React1["React (Shell's copy)"]
-    HeaderMFE --> React2["React (Header's copy)"]
-    ProductsMFE --> React3["React (Products' copy)"]
-    OrdersMFE --> React4["React (Orders' copy)"]
-
-    ShellApp --> ReactDOM1["ReactDOM (Shell's copy)"]
-    HeaderMFE --> ReactDOM2["ReactDOM (Header's copy)"]
-    ProductsMFE --> ReactDOM3["ReactDOM (Products' copy)"]
-    OrdersMFE --> ReactDOM4["ReactDOM (Orders' copy)"]
-
-    UserBrowser -- downloads --> ShellApp
-    UserBrowser -- downloads --> HeaderMFE
-    UserBrowser -- downloads --> ProductsMFE
-    UserBrowser -- downloads --> OrdersMFE
-
-    note right of UserBrowser: Lots of downloading!
-```
 
 The user's browser ends up downloading React (and other common libraries) multiple times – once within the Shell's bundle, once within the Header MFE's bundle, once within the Products MFE's bundle, and so on. This is like every shop in the mall building its _own_ separate restroom facility, even though a single shared one would suffice.
 
