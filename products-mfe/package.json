@@ -7,7 +7,10 @@
     "dev": "webpack serve --config webpack.config.js --mode development",
     "build": "NODE_ENV=production webpack --config webpack.config.js",
     "start": "webpack serve --config webpack.config.js --mode production --port 3002",
-    "deploy:s3": "aws s3 sync dist/ s3://$S3_BUCKET_NAME/mfe/products-mfe/ --delete --cache-control 'max-age=31536000' --acl public-read"
+    "deploy:s3": "npm run deploy:s3:assets && npm run deploy:s3:remoteentry && npm run deploy:cloudfront:invalidate",
+    "deploy:s3:assets": "aws s3 sync dist/ s3://$S3_BUCKET_NAME/mfe/products-mfe/ --delete --exclude 'remoteEntry.js' --cache-control 'max-age=31536000' --acl public-read",
+    "deploy:s3:remoteentry": "aws s3 cp dist/remoteEntry.js s3://$S3_BUCKET_NAME/mfe/products-mfe/remoteEntry.js --cache-control 'no-cache, no-store, must-revalidate, max-age=0' --expires '1970-01-01T00:00:00Z' --acl public-read",
+    "deploy:cloudfront:invalidate": "AWS_PAGER='' aws cloudfront create-invalidation --distribution-id $CLOUD_FRONT_DISTRIBUTION_ID --paths '/mfe/products-mfe/remoteEntry.js'"
   },
   "dependencies": {
     "react": "^17.0.2",

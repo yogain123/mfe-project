@@ -192,7 +192,7 @@ const App = () => {
             borderRadius: "8px",
           }}
         >
-          <h3>👤 User Profile (Embedded MFE)</h3>
+          <h3>👤 User Profile (This is Embedded MFE)</h3>
           <Suspense fallback={<div>Loading User Profile MFE...</div>}>
             <UserProfileMfe user={user} />
           </Suspense>
