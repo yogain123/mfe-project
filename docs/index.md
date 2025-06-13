@@ -1,64 +1,57 @@
 # Tutorial: mfe-project
 
-This project is a **learning demo** showcasing a Micro Frontend (MFE) architecture.
-It works like a **Shell** (the main application) that loads and displays different,
-independently built and deployed parts called **Micro Frontends** (like Products, Orders, or Header).
-It uses **Webpack Module Federation** to share common code like React and enable MFEs
-to communicate and load each other dynamically, providing a **flexible and resilient** application structure.
-
-**Source Repository:** [None](None)
+This project demonstrates a **Micro Frontend (MFE)** architecture where a main **Shell Application** _hosts_ multiple independent mini-applications (the MFEs). It uses **Webpack Module Federation** to dynamically load these MFEs at runtime. Communication and shared data between the Shell and MFEs are handled via a global **Event Bus** and **Shared Context**. A mock **JSON Server** acts as the backend for user data, accessed by **User API Services** within both the Shell and MFEs, with updates being broadcast via the Event Bus.
 
 ```mermaid
 flowchart TD
-    A0["Micro Frontend (MFE)
-"]
-    A1["Shell (Host Application)
-"]
-    A2["Webpack Module Federation
-"]
-    A3["Remote Module (Exposed Component/App)
-"]
-    A4["Remote Entry File
-"]
-    A5["Shared Modules
-"]
-    A6["Inter-MFE Communication (Event Bus & Context)
-"]
-    A7["Routing
-"]
-    A8["Error Boundary
-"]
-    A1 -- "Orchestrates/Loads" --> A0
-    A0 -- "Uses for configuration" --> A2
-    A1 -- "Uses for configuration" --> A2
-    A0 -- "Exposes Component" --> A3
-    A2 -- "Generates Definition File" --> A4
-    A1 -- "Fetches MFE Definition" --> A4
-    A1 -- "Provides Libraries" --> A5
-    A0 -- "Uses Libraries" --> A5
-    A1 -- "Implements Communication" --> A6
-    A0 -- "Communicates via Bus/Context" --> A6
-    A1 -- "Manages Main Navigation" --> A7
-    A0 -- "Manages Internal Navigation" --> A7
-    A1 -- "Wraps MFEs" --> A8
-    A8 -- "Protects MFE" --> A0
+    A0["Micro Frontend (MFE)"]
+    A1["Shell Application (Host)"]
+    A2["Webpack Module Federation"]
+    A3["Remote Micro Frontend (Exposed Module)"]
+    A4["Event Bus (window.mfeEventBus)"]
+    A5["Shared Context (window.mfeGlobalContext)"]
+    A6["User API Service (UserApiService)"]
+    A7["remoteEntry.js"]
+    A8["Shared Modules/Libraries"]
+    A9["JSON Server"]
+
+    A1 -- "Hosts" --> A0
+    A2 -- "Enables loading of" --> A0
+    A0 -- "Exposes" --> A3
+    A2 -- "Uses manifest" --> A7
+    A1 -- "Initializes" --> A4
+    A0 -- "Communicates via" --> A4
+    A1 -- "Initializes & Manages" --> A5
+    A0 -- "Accesses data from" --> A5
+    A0 -- "Uses" --> A6
+    A1 -- "Uses" --> A6
+    A6 -- "Calls API on" --> A9
+    A6 -- "Emits events to" --> A4
+    A2 -- "Configures sharing of" --> A8
+    A1 -- "Consumes" --> A8
+    A0 -- "Consumes" --> A8
+
 ```
 
 ## Chapters
 
-1. [Micro Frontend (MFE)
-   ](01_micro_frontend__mfe__.md)
-2. [Shell (Host Application)
-   ](02_shell__host_application__.md)
+1. [Shell Application (Host)
+   ](01_shell_application__host__.md)
+2. [Micro Frontend (MFE)
+   ](02_micro_frontend__mfe__.md)
 3. [Webpack Module Federation
    ](03_webpack_module_federation_.md)
-4. [Remote Entry File
-   ](04_remote_entry_file_.md)
-5. [Remote Module (Exposed Component/App)
-   ](05_remote_module__exposed_component_app__.md)
-6. [Shared Modules
-   ](06_shared_modules_.md)
-7. [Inter-MFE Communication (Event Bus & Context)
-   ](07_inter_mfe_communication__event_bus___context__.md)
-8. [Routing
-   ](08_routing_.md)
+4. [Remote Micro Frontend (Exposed Module)
+   ](04_remote_micro_frontend__exposed_module__.md)
+5. [`remoteEntry.js`
+   ](05__remoteentry_js__.md)
+6. [Shared Modules/Libraries
+   ](06_shared_modules_libraries_.md)
+7. [Event Bus (`window.mfeEventBus`)
+   ](07_event_bus___window_mfeeventbus___.md)
+8. [Shared Context (`window.mfeGlobalContext`)
+   ](08_shared_context___window_mfeglobalcontext___.md)
+9. [User API Service (`UserApiService`)
+   ](09_user_api_service___userapiservice___.md)
+10. [JSON Server
+    ](10_json_server_.md)
