@@ -13,8 +13,6 @@ const getRemoteUrl = (port, name) => {
     const s3Url = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${name}/remoteEntry.js`;
     console.log("s3Url", s3Url);
 
-    return s3Url;
-
     const cloudFrontUrl = `https://${process.env.CLOUD_FRONT_DISTRIBUTION_ID}.cloudfront.net/${name}/remoteEntry.js`;
     console.log("cloudFrontUrl", cloudFrontUrl);
 
