@@ -35,7 +35,7 @@
     "deploy:header": "./deploy.sh deploy header",
     "deploy:products": "./deploy.sh deploy products",
     "deploy:orders": "./deploy.sh deploy orders",
-    "deploy:profile": "./quick-deploy.sh deploy profile"
+    "deploy:profile": "./deploy.sh deploy profile"
   },
   "devDependencies": {
     "concurrently": "^7.6.0",
