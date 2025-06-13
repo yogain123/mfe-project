@@ -3,16 +3,33 @@ const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPl
 
 const isProduction = process.env.NODE_ENV === "production";
 
+// Environment-based URLs for MFEs
 const getRemoteUrl = (port, name) => {
   if (isProduction) {
-    return `https://your-s3-bucket.s3.amazonaws.com/${name}/remoteEntry.js`;
+    // Pull from S3 bucket for production
+    const s3Url = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${name}/remoteEntry.js`;
+    console.log("s3Url", s3Url);
+
+    const cloudFrontUrl = `https://${process.env.CLOUD_FRONT_DISTRIBUTION_ID}.cloudfront.net/${name}/remoteEntry.js`;
+    console.log("cloudFrontUrl", cloudFrontUrl);
+
+    return cloudFrontUrl;
   }
+
   return `http://localhost:${port}/remoteEntry.js`;
 };
 
 module.exports = {
   mode: isProduction ? "production" : "development",
   entry: "./src/index.js",
+
+  output: {
+    filename: isProduction ? "[name].[contenthash].js" : "[name].js",
+    chunkFilename: isProduction
+      ? "[name].[contenthash].chunk.js"
+      : "[name].chunk.js",
+    clean: true,
+  },
 
   devServer: {
     port: 3002,
@@ -61,7 +78,7 @@ module.exports = {
         // This MFE can also consume other MFEs (like User Profile)
         userProfileMfe: `userProfileMfe@${getRemoteUrl(
           3004,
-          "user-profile-mfe"
+          "mfe/user-profile-mfe"
         )}`,
       },
       shared: {

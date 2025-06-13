@@ -5,7 +5,7 @@ const ProductList = () => {
   const [products] = useState([
     {
       id: 1,
-      name: "Wireless Headphones",
+      name: "Wireless Headphoness",
       price: 99.99,
       category: "Electronics",
       stock: 25,

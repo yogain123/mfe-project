@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack serve --config webpack.config.js --mode development",
-    "build": "webpack --config webpack.config.js --mode production",
+    "build": "NODE_ENV=production webpack --config webpack.config.js",
     "start": "webpack serve --config webpack.config.js --mode production --port 3002",
     "deploy:s3": "aws s3 sync dist/ s3://$S3_BUCKET_NAME/mfe/products-mfe/ --delete --cache-control 'max-age=31536000' --acl public-read"
   },

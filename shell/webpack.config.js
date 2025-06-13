@@ -3,6 +3,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 
 const isProduction = process.env.NODE_ENV === "production";
+console.log("isProduction", isProduction);
+console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 
 // Environment-based URLs for MFEs
 const getRemoteUrl = (port, name) => {
@@ -10,6 +12,8 @@ const getRemoteUrl = (port, name) => {
     // Pull from S3 bucket for production
     const s3Url = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${name}/remoteEntry.js`;
     console.log("s3Url", s3Url);
+
+    return s3Url;
 
     const cloudFrontUrl = `https://${process.env.CLOUD_FRONT_DISTRIBUTION_ID}.cloudfront.net/${name}/remoteEntry.js`;
     console.log("cloudFrontUrl", cloudFrontUrl);
@@ -23,6 +27,14 @@ const getRemoteUrl = (port, name) => {
 module.exports = {
   mode: isProduction ? "production" : "development",
   entry: "./src/index.js",
+
+  output: {
+    filename: isProduction ? "[name].[contenthash].js" : "[name].js",
+    chunkFilename: isProduction
+      ? "[name].[contenthash].chunk.js"
+      : "[name].chunk.js",
+    clean: true,
+  },
 
   devServer: {
     port: 3000,

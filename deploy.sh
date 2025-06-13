@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export NODE_ENV=production
-
 # Check if this is a single MFE deployment command
 if [ "$1" = "deploy" ]; then
     # Load environment variables from .env file
