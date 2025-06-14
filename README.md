@@ -24,7 +24,7 @@ This project demonstrates a complete **Micro Frontend (MFE) architecture** using
 │  ┌─────────────────────────────────────────────────────┐    │
 │  │         USER PROFILE MFE (Component)                │    │
 │  │              (Port: 3004)                           │    │
-│  │    (Can be embedded in other MFEs)                  │    │
+│  │    (It is Embedded in Products MFEs)                  │    │
 │  └─────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
 ```
