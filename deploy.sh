@@ -66,7 +66,7 @@ echo "🚀 Quick MFE Deployment Starting..."
 
 # Note about S3 bucket configuration
 echo "📋 Note: Ensure your S3 bucket allows public read access for the assets to be accessible"
-echo "   All files will be uploaded with public-read ACL permissions"
+echo "All files will be uploaded with public-read ACL permissions"
 
 # Configure AWS CLI
 aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
