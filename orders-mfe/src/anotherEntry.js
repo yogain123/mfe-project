@@ -4,7 +4,9 @@
   const ReactDOM = await import("react-dom");
 
   ReactDOM.render(
-    <div>This is another entry point</div>,
+    <div style={{ border: "2px dotted black" }}>
+      This is another entry point
+    </div>,
     document.getElementById("another-root")
   );
 })();
