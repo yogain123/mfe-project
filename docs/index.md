@@ -4,22 +4,17 @@ This project is built using a **Micro Frontend (MFE)** architecture, splitting a
 
 ```mermaid
 flowchart TD
-    A0["Micro Frontend (MFE) Structure
-"]
-    A1["Webpack Module Federation Plugin
-"]
-    A2["Shared Dependencies
-"]
-    A3["Event Bus (window.mfeEventBus)
-"]
-    A4["Global Context (window.mfeGlobalContext)
-"]
-    A5["User API Service
-"]
-    A6["Standalone vs. Integrated Modes (Bootstrap)
-"]
-    A7["Page MFEs vs. Component MFEs
-"]
+    %% Main Architecture
+    A0["Micro Frontend (MFE) Structure"]
+    A1["Webpack Module Federation Plugin"]
+    A2["Shared Dependencies"]
+    A3["Event Bus (window.mfeEventBus)"]
+    A4["Global Context (window.mfeGlobalContext)"]
+    A5["User API Service"]
+    A6["Standalone vs Integrated Modes (Bootstrap)"]
+    A7["Page MFEs vs Component MFEs"]
+
+    %% Relationships
     A1 -- "Enables structure" --> A0
     A1 -- "Configures shared dependencies" --> A2
     A0 -- "Classifies MFEs within" --> A7
@@ -28,6 +23,17 @@ flowchart TD
     A5 -- "Emits events via" --> A3
     A5 -- "Accesses state via" --> A4
     A6 -- "Supports modes for" --> A0
+
+    %% Styles
+    style A0 fill:#e6f7ff,stroke:#1890ff,stroke-width:2px,color:#000
+    style A1 fill:#fff2e8,stroke:#fa8c16,stroke-width:2px,color:#000
+    style A2 fill:#fffbe6,stroke:#fadb14,stroke-width:2px,color:#000
+    style A3 fill:#f6ffed,stroke:#52c41a,stroke-width:2px,color:#000
+    style A4 fill:#f0f5ff,stroke:#2f54eb,stroke-width:2px,color:#000
+    style A5 fill:#fff0f6,stroke:#eb2f96,stroke-width:2px,color:#000
+    style A6 fill:#e6fffb,stroke:#13c2c2,stroke-width:2px,color:#000
+    style A7 fill:#f9f0ff,stroke:#722ed1,stroke-width:2px,color:#000
+
 ```
 
 ## Chapters
