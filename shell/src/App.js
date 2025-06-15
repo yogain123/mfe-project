@@ -12,6 +12,9 @@ import "./EventBus"; // Initialize event bus
 const HeaderMfe = React.lazy(() => import("headerMfe/Header"));
 const ProductsMfe = React.lazy(() => import("productsMfe/App"));
 const OrdersMfe = React.lazy(() => import("ordersMfe/App"));
+const CompletlyDifferentComp = React.lazy(() =>
+  import("ordersMfe/CompletlyDifferentComp")
+);
 
 // Simple loading component
 const Loading = ({ message = "Loading..." }) => (
@@ -88,6 +91,7 @@ const AppContent = () => {
               element={
                 <Suspense fallback={<Loading message="Loading Orders..." />}>
                   <OrdersMfe />
+                  <CompletlyDifferentComp />
                 </Suspense>
               }
             />

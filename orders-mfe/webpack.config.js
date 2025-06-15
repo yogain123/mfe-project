@@ -3,9 +3,26 @@ const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPl
 
 const isProduction = process.env.NODE_ENV === "production";
 
+/**
+ * You can have multiple entry points and multiple exposed modules, but they're all served from a single `remoteEntry.js` unless you split builds using separate Webpack configs.
+ *
+ * Entry points are used to run your app in standalone mode.
+ * Exposes define what modules are available to host apps via Module Federation.
+ * Each exposed module gets its own chunk and is included in `remoteEntry.js`, even if it's not part of any entry point.
+ *
+ * Entry points and exposes are independent of each other.
+ *
+ * Go to Order mfe to explore below examples which will prove my point above
+ * - multiple entry points
+ * - completely different exposed modules which are not part of the main entry point
+ */
+
 module.exports = {
   mode: isProduction ? "production" : "development",
-  entry: "./src/index.js",
+  entry: {
+    main: "./src/index.js",
+    anotherEntry: "./src/anotherEntry.js",
+  },
 
   output: {
     filename: isProduction ? "[name].[contenthash].js" : "[name].js",
@@ -56,6 +73,7 @@ module.exports = {
       filename: "remoteEntry.js",
       exposes: {
         "./App": "./src/App",
+        "./CompletlyDifferentComp": "./src/CompletlyDifferentComp",
       },
       shared: {
         react: {
@@ -77,6 +95,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./public/index.html",
       title: "Orders MFE - Standalone",
+      chunks: ["main", "anotherEntry"],
     }),
   ],
 };
