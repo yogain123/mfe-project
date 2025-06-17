@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "webpack serve --config webpack.config.js --mode development",
     "build": "NODE_ENV=production webpack --config webpack.config.js",
-    "start": "webpack serve --config webpack.config.js --mode production --port 3006"
+    "start": "webpack serve --config webpack.config.js --mode production --port 3006",
+    "deploy:s3": "npm run deploy:s3:assets && npm run deploy:s3:remoteentry && npm run deploy:cloudfront:invalidate",
+    "deploy:s3:assets": "aws s3 sync dist/ s3://$S3_BUCKET_NAME/mfe/natasha-chatbot-mfe/ --delete --exclude 'remoteEntry.js' --cache-control 'max-age=31536000' --acl public-read",
+    "deploy:s3:remoteentry": "aws s3 cp dist/remoteEntry.js s3://$S3_BUCKET_NAME/mfe/natasha-chatbot-mfe/remoteEntry.js --cache-control 'no-cache, no-store, must-revalidate, max-age=0' --expires '1970-01-01T00:00:00Z' --acl public-read",
+    "deploy:cloudfront:invalidate": "AWS_PAGER='' aws cloudfront create-invalidation --distribution-id $CLOUD_FRONT_DISTRIBUTION_ID --paths '/mfe/natasha-chatbot-mfe/remoteEntry.js'"
   },
   "dependencies": {
     "js-yaml": "^4.1.0",

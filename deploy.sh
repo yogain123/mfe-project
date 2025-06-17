@@ -29,6 +29,10 @@ if [ "$1" = "deploy" ]; then
             echo "🚀 Deploying User Profile MFE to S3..."
             cd user-profile-mfe && echo "building user profile mfe" && npm run build && npm run deploy:s3
             ;;
+        "chatbot")
+            echo "🚀 Deploying Natasha Chatbot MFE to S3..."
+            cd natasha-chatbot-mfe && echo "building natasha chatbot mfe" && npm run build && npm run deploy:s3
+            ;;
         "shell")
             echo "🚀 Deploying Shell to S3..."
             cd shell && echo "building shell" && npm run build && npm run deploy:s3
