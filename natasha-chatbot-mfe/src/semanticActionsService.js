@@ -1,13 +1,47 @@
-import openApiConverter from "./openApiConverter.js";
+import openApiSpec from "./openai.json";
 
 const OPENAI_API_KEY = "dummy-api-key";
 
 class SemanticActionsService {
   constructor() {
-    // Load system prompt and configuration from OpenAPI spec
-    this.systemPrompt = openApiConverter.getSystemPrompt();
-    this.openAiConfig = openApiConverter.getOpenAIConfig();
-    this.functions = openApiConverter.getFunctions();
+    // Extract data from OpenAPI spec
+    this.systemPrompt = openApiSpec["x-system-prompt"];
+    this.openAiConfig = openApiSpec["x-openai-config"];
+    this.actionMap = openApiSpec["x-action-map"];
+    this.functions = this.extractFunctionsFromOpenAPI(openApiSpec);
+  }
+
+  /**
+   * Convert OpenAPI paths to OpenAI function format
+   */
+  extractFunctionsFromOpenAPI(spec) {
+    const functions = [];
+
+    for (const [path, pathConfig] of Object.entries(spec.paths)) {
+      for (const [method, operation] of Object.entries(pathConfig)) {
+        if (method.toLowerCase() === "post" && operation.operationId) {
+          const functionDef = {
+            name: operation.operationId,
+            description: operation.summary || operation.description || "",
+          };
+
+          // Extract parameters from requestBody schema
+          if (operation.requestBody?.content?.["application/json"]?.schema) {
+            const schema =
+              operation.requestBody.content["application/json"].schema;
+            functionDef.parameters = {
+              type: "object",
+              properties: schema.properties || {},
+              required: schema.required || [],
+            };
+          }
+
+          functions.push(functionDef);
+        }
+      }
+    }
+
+    return functions;
   }
 
   async processUserInput(userInput) {
@@ -36,8 +70,8 @@ class SemanticActionsService {
             content: userInput,
           },
         ],
-        functions: this.functions, // Functions loaded from OpenAPI YAML
-        function_call: "auto", // Let OpenAI decide which function to call
+        functions: this.functions,
+        function_call: "auto",
         temperature: this.openAiConfig.temperature,
         max_tokens: this.openAiConfig.max_tokens,
       }),
@@ -68,10 +102,10 @@ class SemanticActionsService {
   }
 
   executeFunctionCall(functionName, args, originalInput) {
-    // Get action configuration from OpenAPI converter
-    const actionConfig = openApiConverter.getActionConfig(functionName);
+    // Get action configuration from action map
+    const actionConfig = this.actionMap[functionName];
 
-    if (actionConfig.action === "unknown") {
+    if (!actionConfig) {
       return {
         success: false,
         response: `Unknown function: ${functionName}`,
@@ -88,6 +122,11 @@ class SemanticActionsService {
           ""
         )} page.`;
         break;
+      case "display_info":
+        response = "Here's your profile information.";
+        break;
+      default:
+        response = "Action completed successfully.";
     }
 
     return {
@@ -109,6 +148,9 @@ class SemanticActionsService {
     switch (action) {
       case "navigation":
         window.mfeEventBus.emit("natasha:navigate", { path: target });
+        break;
+      case "display_info":
+        window.mfeEventBus.emit("natasha:show_profile", {});
         break;
     }
   }

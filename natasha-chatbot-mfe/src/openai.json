@@ -1,0 +1,185 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Natasha Chatbot API",
+    "description": "Semantic actions for Natasha AI chatbot in e-commerce application",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local MFE Shell server"
+    }
+  ],
+  "paths": {
+    "/semantic-actions/navigateToProducts": {
+      "post": {
+        "operationId": "navigateToProducts",
+        "summary": "Navigate to products page",
+        "description": "Navigate to products page when user asks to see products",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userQuery": {
+                    "type": "string",
+                    "description": "The original user query",
+                    "example": "show me products"
+                  }
+                },
+                "required": ["userQuery"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Navigation successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NavigationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/semantic-actions/navigateToOrders": {
+      "post": {
+        "operationId": "navigateToOrders",
+        "summary": "Navigate to orders page",
+        "description": "Navigate to orders page when user asks to see orders",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userQuery": {
+                    "type": "string",
+                    "description": "The original user query",
+                    "example": "show me my orders"
+                  }
+                },
+                "required": ["userQuery"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Navigation successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NavigationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/semantic-actions/showUserProfile": {
+      "post": {
+        "operationId": "showUserProfile",
+        "summary": "Show user profile",
+        "description": "Show user profile information",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userQuery": {
+                    "type": "string",
+                    "description": "The original user query",
+                    "example": "show my profile"
+                  }
+                },
+                "required": ["userQuery"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile information retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NavigationResponse": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "example": "navigation"
+          },
+          "target": {
+            "type": "string",
+            "example": "/products"
+          },
+          "message": {
+            "type": "string",
+            "example": "Navigating to products page"
+          }
+        }
+      },
+      "ProfileResponse": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "example": "display_info"
+          },
+          "target": {
+            "type": "string",
+            "example": "user_profile"
+          },
+          "message": {
+            "type": "string",
+            "example": "Here's your profile information"
+          }
+        }
+      }
+    }
+  },
+  "x-openai-config": {
+    "model": "gpt-3.5-turbo",
+    "temperature": 0.7,
+    "max_tokens": 150
+  },
+  "x-system-prompt": "You are Natasha, a helpful AI assistant for an e-commerce application. You can help users navigate to products, orders, and show their profile. Keep responses concise and friendly.",
+  "x-action-map": {
+    "navigateToProducts": {
+      "action": "navigation",
+      "target": "/products"
+    },
+    "navigateToOrders": {
+      "action": "navigation",
+      "target": "/orders"
+    },
+    "showUserProfile": {
+      "action": "display_info",
+      "target": "user_profile"
+    }
+  }
+}
