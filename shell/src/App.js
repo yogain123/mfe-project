@@ -1,9 +1,10 @@
-import React, { Suspense, useContext, useState } from "react";
+import React, { Suspense, useContext, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
 import AppContext, { AppContextProvider } from "./AppContext";
 import "./EventBus"; // Initialize event bus
@@ -15,11 +16,34 @@ const OrdersMfe = React.lazy(() => import("ordersMfe/App"));
 const CompletlyDifferentComp = React.lazy(() =>
   import("ordersMfe/CompletlyDifferentComp")
 );
+const NatashaChatbotMfe = React.lazy(() =>
+  import("natashaChatbotMfe/NatashaChatbot")
+);
 
 // Simple loading component
 const Loading = ({ message = "Loading..." }) => (
   <div style={{ padding: "20px", textAlign: "center" }}>{message}</div>
 );
+
+// Component to handle semantic actions - must be inside Router
+const SemanticActionsHandler = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (window.mfeEventBus) {
+      // Handle navigation requests from Natasha
+      const handleNatashaNavigation = (data) => {
+        console.log("🎯 Shell: Natasha navigation request:", data);
+        if (data.path) {
+          navigate(data.path);
+        }
+      };
+
+      window.mfeEventBus.on("natasha:navigate", handleNatashaNavigation);
+    }
+  }, [navigate]);
+
+  return null;
+};
 
 const AppContent = () => {
   const appContext = useContext(AppContext);
@@ -50,6 +74,9 @@ const AppContent = () => {
   return (
     <div className="app">
       <Router>
+        {/* Semantic Actions Handler - must be inside Router */}
+        <SemanticActionsHandler />
+
         {/* API Status Indicator */}
         <div
           style={{
@@ -127,6 +154,11 @@ const AppContent = () => {
           </p>
         </div>
 
+        {/* Natasha Chatbot - Always visible at bottom */}
+        <Suspense fallback={null}>
+          <NatashaChatbotMfe />
+        </Suspense>
+
         {/* Footer */}
         <footer
           style={{
@@ -183,6 +215,12 @@ const AppContent = () => {
                 <p>Port: 3004</p>
                 <p>Type: Component MFE</p>
                 <p>Framework: React</p>
+              </div>
+              <div>
+                <h5>🤖 Natasha Chatbot MFE</h5>
+                <p>Port: 3006</p>
+                <p>Type: Component MFE</p>
+                <p>Framework: React + AI</p>
               </div>
             </div>
             <div
