@@ -29,7 +29,7 @@ if [ "$1" = "deploy" ]; then
             echo "🚀 Deploying User Profile MFE to S3..."
             cd user-profile-mfe && echo "building user profile mfe" && npm run build && npm run deploy:s3
             ;;
-        "chatbot")
+        "natasha")
             echo "🚀 Deploying Natasha Chatbot MFE to S3..."
             cd natasha-chatbot-mfe && echo "building natasha chatbot mfe" && npm run build && npm run deploy:s3
             ;;
@@ -38,7 +38,7 @@ if [ "$1" = "deploy" ]; then
             cd shell && echo "building shell" && npm run build && npm run deploy:s3
             ;;
         *)
-            echo "Usage: ./quick-deploy.sh deploy [header|products|orders|profile|shell]"
+            echo "Usage: ./deploy.sh deploy [header|products|orders|profile|natasha|shell]"
             exit 1
             ;;
     esac
