@@ -1,5 +1,7 @@
+require("dotenv").config({ path: "../.env" });
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const webpack = require("webpack");
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -49,7 +51,12 @@ module.exports = {
     ],
   },
 
+  // this plugin is to make sure we can use process.env in frontend code
   plugins: [
+    new webpack.DefinePlugin({
+      "process.env.OPENAI_API_KEY": JSON.stringify(process.env.OPENAI_API_KEY),
+    }),
+
     new ModuleFederationPlugin({
       name: "natashaChatbotMfe",
       filename: "remoteEntry.js",

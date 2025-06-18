@@ -1,7 +1,6 @@
 import openApiSpec from "./openai.json";
 
-// const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const OPENAI_API_KEY = "dummy-api-key";
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 class SemanticActionsService {
   constructor() {
