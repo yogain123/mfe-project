@@ -72,8 +72,56 @@ class SemanticActionsService {
             content: userInput,
           },
         ],
-        functions: this.functions,
-        function_call: "auto",
+
+        /**
+        We can also have direct function definitions in a .js file instead of using openai.json and then convert it to functions array
+        Example of direct function definitions -> this.functions
+        this.functions = [
+          {
+            name: "navigate",
+            description: "Navigate to different sections of the app",
+            parameters: {
+              type: "object",
+              properties: {
+                destination: {
+                  type: "string",
+                  description: "Where the user wants to go (products, orders, etc.)",
+                  enum: ["products", "orders"]
+                },
+                userQuery: {
+                  type: "string", 
+                  description: "The original user query",
+                  example: "show me products"
+                }
+              },
+              required: ["destination", "userQuery"]
+            }
+          },
+          {
+            name: "updateUserProfile",
+            description: "Update user profile information",
+            parameters: {
+              type: "object",
+              properties: {
+                name: {
+                  type: "string",
+                  description: "User's full name"
+                },
+                email: {
+                  type: "string",
+                  description: "User's email address"
+                }
+              },
+              required: ["name"]
+            }
+          }
+        ]
+        */
+        tools: this.functions.map((func) => ({
+          type: "function",
+          function: func,
+        })),
+        tool_choice: "auto",
         temperature: this.openAiConfig.temperature,
         max_tokens: this.openAiConfig.max_tokens,
       }),
@@ -86,10 +134,11 @@ class SemanticActionsService {
     const data = await response.json();
     const message = data.choices[0]?.message;
 
-    // Check if OpenAI called a function
-    if (message?.function_call) {
-      const functionName = message.function_call.name;
-      const functionArgs = JSON.parse(message.function_call.arguments || "{}");
+    // Check if OpenAI called a tool
+    if (message?.tool_calls && message.tool_calls.length > 0) {
+      const toolCall = message.tool_calls[0];
+      const functionName = toolCall.function.name;
+      const functionArgs = JSON.parse(toolCall.function.arguments || "{}");
 
       return this.executeFunctionCall(functionName, functionArgs, userInput);
     }
