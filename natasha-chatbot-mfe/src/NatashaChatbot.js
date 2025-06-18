@@ -107,7 +107,7 @@ const NatashaChatbot = () => {
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle Natasha Chatbot"
       >
-        {isOpen ? "✕" : "🤖"}
+        {isOpen ? "✕" : "👩‍💻"}
         <span className="toggle-text">{isOpen ? "Close" : "Natasha"}</span>
       </button>
 
@@ -117,7 +117,7 @@ const NatashaChatbot = () => {
           {/* Header */}
           <div className="natasha-header">
             <div className="header-info">
-              <span className="bot-avatar">🤖</span>
+              <span className="bot-avatar">👩‍💻</span>
               <div>
                 <h3>Natasha</h3>
                 <p>AI Assistant with Semantic Actions</p>
@@ -186,7 +186,7 @@ const NatashaChatbot = () => {
 
           {/* MFE Info */}
           <div className="natasha-footer">
-            <span>🤖 Natasha Chatbot MFE :3006 | Semantic Actions Enabled</span>
+            <span>👩‍💻 Natasha Chatbot MFE :3006 | Semantic Actions Enabled</span>
           </div>
         </div>
       )}
