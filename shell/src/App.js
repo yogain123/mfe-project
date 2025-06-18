@@ -18,7 +18,12 @@ const CompletlyDifferentComp = React.lazy(() =>
   import("ordersMfe/CompletlyDifferentComp")
 );
 const NatashaChatbotMfe = React.lazy(() =>
-  import("natashaChatbotMfe/NatashaChatbot")
+  import("natashaChatbotMfe/NatashaChatbot").catch(() => {
+    console.warn(
+      "Natasha Chatbot MFE failed to load - showing empty component"
+    );
+    return { default: () => null };
+  })
 );
 
 // Simple loading component
