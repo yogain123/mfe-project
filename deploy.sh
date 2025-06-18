@@ -31,7 +31,8 @@ if [ "$1" = "deploy" ]; then
             ;;
         "natasha")
             echo "🚀 Deploying Natasha Chatbot MFE to S3..."
-            cd natasha-chatbot-mfe && echo "building natasha chatbot mfe" && npm run build && npm run deploy:s3
+            # cd natasha-chatbot-mfe && echo "building natasha chatbot mfe" && npm run build && npm run deploy:s3
+            cd natasha-chatbot-mfe && echo "building natasha chatbot mfe" && npm run build && echo "I will not deploy to s3 because the chunk will have openapi key in it as I have api calls from FE only for learning purposes"
             ;;
         "shell")
             echo "🚀 Deploying Shell to S3..."
