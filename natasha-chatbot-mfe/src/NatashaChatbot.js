@@ -8,7 +8,7 @@ const NatashaChatbot = () => {
     {
       id: 1,
       type: "bot",
-      text: "Hi! I'm Natasha, your AI assistant. I can help you navigate the app, try asking me to navigate to products or orders!",
+      text: "Hi! I'm Natasha, your AI assistant. I can help you navigate the app and update your profile, try asking me to navigate to products or orders, or update your profile! all just in natural language!",
       timestamp: new Date(),
     },
   ]);
