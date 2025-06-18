@@ -94,6 +94,7 @@ mfe-project/
    ```bash
    git clone <repository-url>
    cd mfe-project
+   npm install
    npm run install:all
    ```
 
