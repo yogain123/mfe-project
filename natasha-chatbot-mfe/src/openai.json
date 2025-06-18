@@ -12,11 +12,11 @@
     }
   ],
   "paths": {
-    "/semantic-actions/navigateToProducts": {
+    "/semantic-actions/navigate": {
       "post": {
-        "operationId": "navigateToProducts",
-        "summary": "Navigate to products page",
-        "description": "Navigate to products page when user asks to see products",
+        "operationId": "navigate",
+        "summary": "Navigate to different sections of the app",
+        "description": "Navigate to products, orders, or any other section based on user request",
         "requestBody": {
           "required": true,
           "content": {
@@ -24,13 +24,18 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "destination": {
+                    "type": "string",
+                    "description": "Where the user wants to go (products, orders, etc.)",
+                    "enum": ["products", "orders"]
+                  },
                   "userQuery": {
                     "type": "string",
                     "description": "The original user query",
                     "example": "show me products"
                   }
                 },
-                "required": ["userQuery"]
+                "required": ["destination", "userQuery"]
               }
             }
           }
@@ -49,11 +54,11 @@
         }
       }
     },
-    "/semantic-actions/navigateToOrders": {
+    "/semantic-actions/updateUserProfile": {
       "post": {
-        "operationId": "navigateToOrders",
-        "summary": "Navigate to orders page",
-        "description": "Navigate to orders page when user asks to see orders",
+        "operationId": "updateUserProfile",
+        "summary": "Update user profile information",
+        "description": "Update user profile data like name and email based on natural language requests",
         "requestBody": {
           "required": true,
           "content": {
@@ -61,10 +66,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "The new name for the user (if mentioned in query)"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "The new email address for the user (if mentioned in query)"
+                  },
                   "userQuery": {
                     "type": "string",
                     "description": "The original user query",
-                    "example": "show me my orders"
+                    "example": "update my name to John Doe and email to john@example.com"
                   }
                 },
                 "required": ["userQuery"]
@@ -74,48 +88,11 @@
         },
         "responses": {
           "200": {
-            "description": "Navigation successful",
+            "description": "Profile update successful",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/NavigationResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/semantic-actions/showUserProfile": {
-      "post": {
-        "operationId": "showUserProfile",
-        "summary": "Show user profile",
-        "description": "Show user profile information",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "userQuery": {
-                    "type": "string",
-                    "description": "The original user query",
-                    "example": "show my profile"
-                  }
-                },
-                "required": ["userQuery"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Profile information retrieved",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProfileResponse"
+                  "$ref": "#/components/schemas/UpdateResponse"
                 }
               }
             }
@@ -129,34 +106,28 @@
       "NavigationResponse": {
         "type": "object",
         "properties": {
-          "action": {
-            "type": "string",
-            "example": "navigation"
-          },
-          "target": {
-            "type": "string",
-            "example": "/products"
+          "success": {
+            "type": "boolean"
           },
           "message": {
-            "type": "string",
-            "example": "Navigating to products page"
+            "type": "string"
           }
         }
       },
-      "ProfileResponse": {
+      "UpdateResponse": {
         "type": "object",
         "properties": {
-          "action": {
-            "type": "string",
-            "example": "display_info"
-          },
-          "target": {
-            "type": "string",
-            "example": "user_profile"
+          "success": {
+            "type": "boolean"
           },
           "message": {
-            "type": "string",
-            "example": "Here's your profile information"
+            "type": "string"
+          },
+          "updatedFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       }
@@ -167,19 +138,13 @@
     "temperature": 0.7,
     "max_tokens": 150
   },
-  "x-system-prompt": "You are Natasha, a helpful AI assistant for an e-commerce application. You can help users navigate to products, orders, and show their profile. Keep responses concise and friendly.",
+  "x-system-prompt": "You are Natasha, a helpful AI assistant for an e-commerce application. You can help users navigate to different sections (products, orders) and update their profile information (name and email). Extract the specific destination or profile changes from their natural language requests. Keep responses concise and friendly.",
   "x-action-map": {
-    "navigateToProducts": {
-      "action": "navigation",
-      "target": "/products"
+    "navigate": {
+      "action": "navigation"
     },
-    "navigateToOrders": {
-      "action": "navigation",
-      "target": "/orders"
-    },
-    "showUserProfile": {
-      "action": "display_info",
-      "target": "user_profile"
+    "updateUserProfile": {
+      "action": "update_profile"
     }
   }
 }

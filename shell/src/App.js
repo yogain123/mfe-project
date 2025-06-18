@@ -7,6 +7,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import AppContext, { AppContextProvider } from "./AppContext";
+import UserApiService from "./userApiService";
 import "./EventBus"; // Initialize event bus
 
 // Lazy load MFE components
@@ -32,13 +33,44 @@ const SemanticActionsHandler = () => {
     if (window.mfeEventBus) {
       // Handle navigation requests from Natasha
       const handleNatashaNavigation = (data) => {
-        console.log("🎯 Shell: Natasha navigation request:", data);
         if (data.path) {
           navigate(data.path);
         }
       };
 
+      // Handle profile update requests from Natasha
+      const handleNatashaProfileUpdate = async (data) => {
+        if (data.updates && Object.keys(data.updates).length > 0) {
+          try {
+            // Get current user data from global context
+            const currentUser = window.mfeGlobalContext?.user || {};
+
+            // Merge updates with current data
+            const updatedUserData = { ...currentUser, ...data.updates };
+
+            // Make API call to update user
+            const apiResponse = await UserApiService.updateUser(
+              updatedUserData
+            );
+
+            // Emit user updated event to refresh all MFEs
+            window.mfeEventBus.emit("user:updated", apiResponse);
+          } catch (error) {
+            // Emit error event
+            window.mfeEventBus.emit("user:api-error", {
+              message: error.message,
+              source: "Natasha Chatbot",
+              updates: data.updates,
+            });
+          }
+        }
+      };
+
       window.mfeEventBus.on("natasha:navigate", handleNatashaNavigation);
+      window.mfeEventBus.on(
+        "natasha:update_profile",
+        handleNatashaProfileUpdate
+      );
     }
   }, [navigate]);
 

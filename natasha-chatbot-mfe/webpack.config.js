@@ -3,17 +3,6 @@ const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPl
 
 const isProduction = process.env.NODE_ENV === "production";
 
-// Environment-based URLs for MFEs
-const getRemoteUrl = (port, name) => {
-  if (isProduction) {
-    // Pull from S3 bucket for production
-    const cloudFrontUrl = `https://${process.env.CLOUD_FRONT_URL}/${name}/remoteEntry.js`;
-    console.log("cloudFrontUrl", cloudFrontUrl);
-    return cloudFrontUrl;
-  }
-  return `http://localhost:${port}/remoteEntry.js`;
-};
-
 module.exports = {
   mode: isProduction ? "production" : "development",
   entry: "./src/index.js",

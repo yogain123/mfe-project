@@ -1,5 +1,6 @@
 import openApiSpec from "./openai.json";
 
+// const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_API_KEY = "dummy-api-key";
 
 class SemanticActionsService {
@@ -51,6 +52,8 @@ class SemanticActionsService {
     }
   }
 
+  // this should be actually called in nodejs server since we cannot expose the api key to the client
+  // openai.json specs and openai api calls should be part of server side
   async processWithOpenAIFunctions(userInput) {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -97,7 +100,7 @@ class SemanticActionsService {
       success: false,
       response:
         message?.content ||
-        "I'm not sure how to help with that. Try asking me to show products, orders, or your profile.",
+        "I'm not sure how to help with that. Try asking me to show products, orders, your profile, or update your profile information.",
     };
   }
 
@@ -114,16 +117,43 @@ class SemanticActionsService {
 
     // Generate response based on action type
     let response;
+    let updates = {};
 
     switch (actionConfig.action) {
       case "navigation":
-        response = `Sure! I'll take you to the ${actionConfig.target.replace(
-          "/",
-          ""
-        )} page.`;
+        let target = "/";
+        if (args.destination) {
+          target = `/${args.destination}`;
+        }
+        response = `Sure! I'll take you to the ${
+          args.destination || "main"
+        } section.`;
+        // Add target to the result for the executeAction method
+        actionConfig.target = target;
         break;
-      case "display_info":
-        response = "Here's your profile information.";
+      case "update_profile":
+        if (args.name) {
+          updates.name = args.name;
+        }
+        if (args.email) {
+          updates.email = args.email;
+        }
+
+        const updatedFields = Object.keys(updates);
+        if (updatedFields.length > 0) {
+          if (updatedFields.length === 1) {
+            response = `Perfect! I'll update your ${updatedFields[0]} to "${
+              updates[updatedFields[0]]
+            }".`;
+          } else {
+            response = `Great! I'll update your ${updatedFields.join(
+              " and "
+            )} for you.`;
+          }
+        } else {
+          response =
+            "I didn't detect any specific profile changes to make. Please specify what you'd like to update (name or email).";
+        }
         break;
       default:
         response = "Action completed successfully.";
@@ -133,6 +163,7 @@ class SemanticActionsService {
       success: true,
       action: actionConfig.action,
       target: actionConfig.target,
+      updates: updates,
       response,
     };
   }
@@ -142,15 +173,16 @@ class SemanticActionsService {
       return;
     }
 
-    const { action, target } = actionResult;
+    const { action, target, updates } = actionResult;
 
     // Dispatch action via the MFE event bus
     switch (action) {
       case "navigation":
         window.mfeEventBus.emit("natasha:navigate", { path: target });
         break;
-      case "display_info":
-        window.mfeEventBus.emit("natasha:show_profile", {});
+      case "update_profile":
+        // Emit profile update event with the updates
+        window.mfeEventBus.emit("natasha:update_profile", { updates });
         break;
     }
   }
